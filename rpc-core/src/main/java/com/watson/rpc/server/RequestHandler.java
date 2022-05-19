@@ -13,35 +13,24 @@ import java.lang.reflect.Method;
 import java.net.Socket;
 
 /**
+ * 进行过程调用的处理器
  * @author watson
  */
 @Slf4j
-public class RequestHandler implements Runnable{
-    private Socket socket;
-    private Object service;
+public class RequestHandler{
+    public Object handle(RpcRequest rpcRequest, Object service){
+        Object result = null;
 
-    public RequestHandler(Socket socket, Object service) {
-        this.socket = socket;
-        this.service = service;
-    }
-    @Override
-    public void run() {
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream())) {
-            RpcRequest rpcRequest = (RpcRequest) objectInputStream.readObject();
-            Object returnObject = invokeMethod(rpcRequest);
-            objectOutputStream.writeObject(RpcResponse.success(returnObject));
-            objectOutputStream.flush();
-        } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
+        try {
+            result = invokeTargetMethod(rpcRequest, service);
+            log.info("服务:{} 成功调用方法:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
+        } catch (IllegalAccessException | InvocationTargetException e) {
             log.error("调用或发送时有错误发生：", e);
         }
+        return result;
     }
 
-    private Object invokeMethod(RpcRequest rpcRequest) throws IllegalAccessException, InvocationTargetException, ClassNotFoundException {
-        Class<?> clazz = Class.forName(rpcRequest.getInterfaceName());
-        if(!clazz.isAssignableFrom(service.getClass())) {
-            return RpcResponse.fail(ResponseCode.CLASS_NOT_FOUND);
-        }
+    private Object invokeTargetMethod(RpcRequest rpcRequest, Object service) throws IllegalAccessException, InvocationTargetException {
         Method method;
         try {
             method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());

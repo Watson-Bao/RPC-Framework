@@ -3,6 +3,7 @@ package com.watson.rpc.exception;
 import com.watson.rpc.enume.RpcError;
 
 /**
+ * RPC调用异常
  * @author watson
  */
 public class RpcException extends RuntimeException{

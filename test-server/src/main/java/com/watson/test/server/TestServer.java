@@ -2,6 +2,8 @@ package com.watson.test.server;
 
 import com.watson.rpc.api.HelloObject;
 import com.watson.rpc.api.HelloService;
+import com.watson.rpc.registry.DefaultServiceRegistry;
+import com.watson.rpc.registry.ServiceRegistry;
 import com.watson.rpc.server.RpcServer;
 
 /**
@@ -10,9 +12,9 @@ import com.watson.rpc.server.RpcServer;
 public class TestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
-//        HelloObject helloObject=new HelloObject(111,"test");
-//        System.out.println(helloService.hello(helloObject));
-        RpcServer rpcServer = new RpcServer();
-        rpcServer.register(helloService, 9000);
+        ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
+        serviceRegistry.register(helloService);
+        RpcServer rpcServer = new RpcServer(serviceRegistry);
+        rpcServer.start(9000);
     }
 }
