@@ -2,6 +2,7 @@ package com.watson.rpc.server;
 
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
+import com.watson.rpc.enume.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -15,11 +16,11 @@ import java.net.Socket;
  * @author watson
  */
 @Slf4j
-public class WorkerThread implements Runnable{
+public class RequestHandler implements Runnable{
     private Socket socket;
     private Object service;
 
-    public WorkerThread(Socket socket, Object service) {
+    public RequestHandler(Socket socket, Object service) {
         this.socket = socket;
         this.service = service;
     }
@@ -28,13 +29,25 @@ public class WorkerThread implements Runnable{
         try (ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream())) {
             RpcRequest rpcRequest = (RpcRequest) objectInputStream.readObject();
-            Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
-            Object returnObject = method.invoke(service, rpcRequest.getParameters());
+            Object returnObject = invokeMethod(rpcRequest);
             objectOutputStream.writeObject(RpcResponse.success(returnObject));
             objectOutputStream.flush();
-        } catch (IOException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
-                 InvocationTargetException e) {
+        } catch (IOException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
             log.error("调用或发送时有错误发生：", e);
         }
+    }
+
+    private Object invokeMethod(RpcRequest rpcRequest) throws IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        Class<?> clazz = Class.forName(rpcRequest.getInterfaceName());
+        if(!clazz.isAssignableFrom(service.getClass())) {
+            return RpcResponse.fail(ResponseCode.CLASS_NOT_FOUND);
+        }
+        Method method;
+        try {
+            method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
+        } catch (NoSuchMethodException e) {
+            return RpcResponse.fail(ResponseCode.METHOD_NOT_FOUND);
+        }
+        return method.invoke(service, rpcRequest.getParameters());
     }
 }

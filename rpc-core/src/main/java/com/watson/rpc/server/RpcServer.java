@@ -28,8 +28,8 @@ public class RpcServer {
             log.info("服务器正在启动...");
             Socket socket;
             while((socket = serverSocket.accept()) != null) {
-                log.info("客户端连接！Ip为：" + socket.getInetAddress());
-                threadPool.execute(new WorkerThread(socket, service));
+                log.info("客户端连接！Ip为：" + socket.getInetAddress() + ":" + socket.getPort());
+                threadPool.execute(new RequestHandler(socket, service));
             }
         } catch (IOException e) {
             log.error("连接时有错误发生：", e);
