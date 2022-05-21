@@ -1,6 +1,5 @@
 package com.watson.test.server;
 
-import com.watson.rpc.api.HelloObject;
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.registry.DefaultServiceRegistry;
 import com.watson.rpc.registry.ServiceRegistry;
