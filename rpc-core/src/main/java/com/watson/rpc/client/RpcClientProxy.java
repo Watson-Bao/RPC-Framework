@@ -21,10 +21,17 @@ public class RpcClientProxy implements InvocationHandler {
         this.port = port;
     }
 
+    /**
+     * 得到代理方法
+     * @param clazz
+     * @return
+     * @param <T>
+     */
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Class<T> clazz) {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, this);
     }
+
 
 
     @Override

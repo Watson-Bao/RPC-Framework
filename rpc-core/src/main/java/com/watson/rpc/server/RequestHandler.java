@@ -30,6 +30,14 @@ public class RequestHandler{
         return result;
     }
 
+    /**
+     * 通过传输过来的request中方法的相关信息反射出目标方法并执行
+     * @param rpcRequest
+     * @param service
+     * @return
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
     private Object invokeTargetMethod(RpcRequest rpcRequest, Object service) throws IllegalAccessException, InvocationTargetException {
         Method method;
         try {
