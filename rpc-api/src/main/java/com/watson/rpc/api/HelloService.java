@@ -9,5 +9,5 @@ public interface HelloService {
      * @param object
      * @return
      */
-    String hello(HelloObject object);
+    String hello(HelloObject object, String code);
 }

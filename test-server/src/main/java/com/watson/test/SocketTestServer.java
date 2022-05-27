@@ -1,19 +1,19 @@
-package com.watson.test.server;
+package com.watson.test;
 
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.registry.DefaultServiceRegistry;
 import com.watson.rpc.registry.ServiceRegistry;
-import com.watson.rpc.server.RpcServer;
+import com.watson.rpc.socket.server.SocketServer;
 
 /**
  * @author watson
  */
-public class TestServer {
+public class SocketTestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
         ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
         serviceRegistry.register(helloService);
-        RpcServer rpcServer = new RpcServer(serviceRegistry);
-        rpcServer.start(9000);
+        SocketServer socketServer = new SocketServer(serviceRegistry);
+        socketServer.start(9000);
     }
 }

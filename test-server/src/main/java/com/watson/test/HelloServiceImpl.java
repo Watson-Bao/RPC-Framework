@@ -1,4 +1,4 @@
-package com.watson.test.server;
+package com.watson.test;
 
 import com.watson.rpc.api.HelloObject;
 import com.watson.rpc.api.HelloService;
@@ -16,8 +16,8 @@ public class HelloServiceImpl implements HelloService {
      * @return
      */
     @Override
-    public String hello(HelloObject object) {
+    public String hello(HelloObject object, String code) {
         log.info("接收到：{}", object.getMessage());
-        return "这是调用方法的返回值，id=" + object.getId();
+        return code+"这是调用方法的返回值，id=" + object.getId();
     }
 }

@@ -1,12 +1,13 @@
-package com.watson.rpc.client;
+package com.watson.rpc.socket.client;
 
+import com.watson.rpc.RpcClient;
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,10 +19,17 @@ import java.net.Socket;
  * @author watson
  */
 @Slf4j
-public class RpcClient {
+@AllArgsConstructor
+public class SocketClient implements RpcClient {
 
-    public Object sendRequest(RpcRequest rpcRequest, String host, int port) {
+    private final String host;
+    private final int port;
+
+
+    @Override
+    public Object sendRequest(RpcRequest rpcRequest) {
         try (Socket socket = new Socket(host, port)) {
+            log.info("消费者发送请求: {}:{}", host, port);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
             objectOutputStream.writeObject(rpcRequest);
