@@ -4,8 +4,6 @@ import com.watson.rpc.RpcServer;
 import com.watson.rpc.codec.CommonDecoder;
 import com.watson.rpc.codec.CommonEncoder;
 import com.watson.rpc.serializer.HessianSerializer;
-import com.watson.rpc.serializer.JsonSerializer;
-import com.watson.rpc.serializer.KryoSerializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -17,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * NIO方式服务提供侧
+ *
  * @author watson
  */
 @Slf4j

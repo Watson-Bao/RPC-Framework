@@ -10,12 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 默认的服务注册表
+ *
  * @author watson
  */
 @Slf4j
-public class DefaultServiceRegistry implements ServiceRegistry{
+public class DefaultServiceRegistry implements ServiceRegistry {
     private static final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
     private static final Set<String> registeredService = ConcurrentHashMap.newKeySet();
+
     /**
      * 将一个服务注册进注册表
      *
@@ -24,15 +26,15 @@ public class DefaultServiceRegistry implements ServiceRegistry{
     @Override
     public <T> void register(T service) {
         String serviceName = service.getClass().getCanonicalName();
-        if(registeredService.contains(serviceName)) {
+        if (registeredService.contains(serviceName)) {
             return;
         }
         registeredService.add(serviceName);
         Class<?>[] interfaces = service.getClass().getInterfaces();
-        if(interfaces.length == 0) {
+        if (interfaces.length == 0) {
             throw new RpcException(RpcError.SERVICE_NOT_IMPLEMENT_ANY_INTERFACE);
         }
-        for(Class<?> i : interfaces) {
+        for (Class<?> i : interfaces) {
             serviceMap.put(i.getCanonicalName(), service);
             log.info("向接口: {} 注册服务: {}", interfaces, serviceName);
         }
@@ -47,7 +49,7 @@ public class DefaultServiceRegistry implements ServiceRegistry{
     @Override
     public Object getService(String serviceName) {
         Object service = serviceMap.get(serviceName);
-        if(service == null) {
+        if (service == null) {
             throw new RpcException(RpcError.SERVICE_NOT_FOUND);
         }
         return service;

@@ -1,6 +1,5 @@
 package com.watson.rpc.serializer;
 
-import com.alibaba.fastjson2.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.watson.rpc.entity.RpcRequest;
@@ -13,11 +12,13 @@ import java.io.IOException;
 
 /**
  * 使用JSON格式的序列化器
+ *
  * @author watson
  */
 @Slf4j
-public class JsonSerializer implements CommonSerializer{
+public class JsonSerializer implements CommonSerializer {
     private ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public byte[] serialize(Object obj) {
         try {
@@ -32,7 +33,7 @@ public class JsonSerializer implements CommonSerializer{
     public Object deserialize(byte[] bytes, Class<?> clazz) {
         try {
             Object obj = objectMapper.readValue(bytes, clazz);
-            if(obj instanceof RpcRequest) {
+            if (obj instanceof RpcRequest) {
                 obj = handleRequest(obj);
             }
             return obj;
@@ -43,14 +44,14 @@ public class JsonSerializer implements CommonSerializer{
     }
 
     /**
-        这里由于使用JSON序列化和反序列化Object数组，无法保证反序列化后仍然为原实例类型
-        需要重新判断处理
+     * 这里由于使用JSON序列化和反序列化Object数组，无法保证反序列化后仍然为原实例类型
+     * 需要重新判断处理
      */
     private Object handleRequest(Object obj) throws IOException {
         RpcRequest rpcRequest = (RpcRequest) obj;
-        for(int i = 0; i < rpcRequest.getParamTypes().length; i ++) {
+        for (int i = 0; i < rpcRequest.getParamTypes().length; i++) {
             Class<?> clazz = rpcRequest.getParamTypes()[i];
-            if(!clazz.isAssignableFrom(rpcRequest.getParameters()[i].getClass())) {
+            if (!clazz.isAssignableFrom(rpcRequest.getParameters()[i].getClass())) {
                 byte[] bytes = objectMapper.writeValueAsBytes(rpcRequest.getParameters()[i]);
                 rpcRequest.getParameters()[i] = objectMapper.readValue(bytes, clazz);
             }

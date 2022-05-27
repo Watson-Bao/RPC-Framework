@@ -9,6 +9,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
  * 通用的编码拦截器
+ *
  * @author watson
  */
 public class CommonEncoder extends MessageToByteEncoder {
@@ -22,7 +23,7 @@ public class CommonEncoder extends MessageToByteEncoder {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Object msg, ByteBuf out) throws Exception {
         out.writeInt(MAGIC_NUMBER);
-        if(msg instanceof RpcRequest) {
+        if (msg instanceof RpcRequest) {
             out.writeInt(PackageType.REQUEST_PACK.getCode());
         } else {
             out.writeInt(PackageType.RESPONSE_PACK.getCode());

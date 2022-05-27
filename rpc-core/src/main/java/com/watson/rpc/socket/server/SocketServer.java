@@ -9,18 +9,20 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
 
 /**
  * 远程方法调用的提供者（服务端）
+ *
  * @author watson
  */
 @Slf4j
 public class SocketServer implements RpcServer {
 
     private final ExecutorService threadPool;
-    private RequestHandler requestHandler = new RequestHandler();
     private final ServiceRegistry serviceRegistry;
+    private RequestHandler requestHandler = new RequestHandler();
+
     public SocketServer(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
         threadPool = ThreadPoolFactory.createDefaultThreadPool("socket-rpc-server");
@@ -31,7 +33,7 @@ public class SocketServer implements RpcServer {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             log.info("服务器启动……");
             Socket socket;
-            while((socket = serverSocket.accept()) != null) {
+            while ((socket = serverSocket.accept()) != null) {
                 log.info("消费者连接: {}:{}", socket.getInetAddress(), socket.getPort());
                 threadPool.execute(new RequestHandlerThread(socket, requestHandler, serviceRegistry));
             }

@@ -1,14 +1,13 @@
 package com.watson.rpc.entity;
 
 import com.watson.rpc.enume.ResponseCode;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  * 提供者执行完成或出错后向消费者返回的结果对象
+ *
  * @author watson
  */
 @Data

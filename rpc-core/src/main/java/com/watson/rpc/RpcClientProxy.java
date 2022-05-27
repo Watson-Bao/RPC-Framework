@@ -1,7 +1,5 @@
 package com.watson.rpc;
 
-import com.alibaba.fastjson2.JSON;
-import com.watson.rpc.socket.client.SocketClient;
 import com.watson.rpc.entity.RpcRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.nio.charset.StandardCharsets;
 
 /**
  * RPC客户端动态代理
+ *
  * @author watson
  */
 @Slf4j
@@ -23,15 +21,15 @@ public class RpcClientProxy implements InvocationHandler {
 
     /**
      * 得到代理方法
+     *
      * @param clazz
-     * @return
      * @param <T>
+     * @return
      */
     @SuppressWarnings("unchecked")
     public <T> T getProxy(Class<T> clazz) {
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, this);
     }
-
 
 
     @Override

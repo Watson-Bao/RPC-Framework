@@ -13,10 +13,11 @@ import java.net.Socket;
 
 /**
  * 处理RpcRequest的工作线程
+ *
  * @author watson
  */
 @Slf4j
-public class RequestHandlerThread implements Runnable{
+public class RequestHandlerThread implements Runnable {
     private Socket socket;
     private RequestHandler requestHandler;
     private ServiceRegistry serviceRegistry;
@@ -26,6 +27,7 @@ public class RequestHandlerThread implements Runnable{
         this.requestHandler = requestHandler;
         this.serviceRegistry = serviceRegistry;
     }
+
     @Override
     public void run() {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());

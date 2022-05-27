@@ -2,15 +2,10 @@ package com.watson.rpc.serializer;
 
 /**
  * 通用的序列化反序列化接口
+ *
  * @author watson
  */
 public interface CommonSerializer {
-    byte[] serialize(Object obj);
-
-    Object deserialize(byte[] bytes, Class<?> clazz);
-
-    int getCode();
-
     static CommonSerializer getByCode(int code) {
         switch (code) {
             case 0:
@@ -23,4 +18,10 @@ public interface CommonSerializer {
                 return null;
         }
     }
+
+    byte[] serialize(Object obj);
+
+    Object deserialize(byte[] bytes, Class<?> clazz);
+
+    int getCode();
 }

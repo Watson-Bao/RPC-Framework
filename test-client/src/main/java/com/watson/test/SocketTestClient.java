@@ -1,12 +1,13 @@
 package com.watson.test;
 
+import com.watson.rpc.RpcClientProxy;
 import com.watson.rpc.api.HelloObject;
 import com.watson.rpc.api.HelloService;
-import com.watson.rpc.RpcClientProxy;
 import com.watson.rpc.socket.client.SocketClient;
 
 /**
  * 测试用消费者（客户端）
+ *
  * @author watson
  */
 public class SocketTestClient {

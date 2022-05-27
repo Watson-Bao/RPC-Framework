@@ -7,6 +7,7 @@ import com.watson.rpc.registry.ServiceRegistry;
 
 /**
  * 测试用Netty服务提供者（服务端）
+ *
  * @author watson
  */
 public class NettyTestServer {

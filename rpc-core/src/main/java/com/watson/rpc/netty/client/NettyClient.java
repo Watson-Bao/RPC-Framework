@@ -6,8 +6,6 @@ import com.watson.rpc.codec.CommonEncoder;
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.serializer.HessianSerializer;
-import com.watson.rpc.serializer.JsonSerializer;
-import com.watson.rpc.serializer.KryoSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -21,14 +19,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class NettyClient implements RpcClient {
-    private String host;
-    private int port;
     private static final Bootstrap bootstrap;
-
-    public NettyClient(String host, int port) {
-        this.host = host;
-        this.port = port;
-    }
 
     static {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -46,6 +37,15 @@ public class NettyClient implements RpcClient {
                     }
                 });
     }
+
+    private String host;
+    private int port;
+
+    public NettyClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
     /**
      * 客户端发送请求
      *
@@ -59,9 +59,9 @@ public class NettyClient implements RpcClient {
             ChannelFuture future = bootstrap.connect(host, port).sync();
             log.info("客户端连接到服务器 {}:{}", host, port);
             Channel channel = future.channel();
-            if(channel != null) {
+            if (channel != null) {
                 channel.writeAndFlush(rpcRequest).addListener(future1 -> {
-                    if(future1.isSuccess()) {
+                    if (future1.isSuccess()) {
                         log.info(String.format("客户端发送消息: %s", rpcRequest.toString()));
                     } else {
                         log.error("发送消息时有错误发生: ", future1.cause());

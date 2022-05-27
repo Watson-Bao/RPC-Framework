@@ -6,6 +6,7 @@ package com.watson.rpc.api;
 public interface HelloService {
     /**
      * 测试用api的接口
+     *
      * @param object
      * @return
      */

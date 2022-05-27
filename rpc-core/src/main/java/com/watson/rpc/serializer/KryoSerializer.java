@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
  * @author watson
  */
 @Slf4j
-public class KryoSerializer implements CommonSerializer{
+public class KryoSerializer implements CommonSerializer {
     private static final ThreadLocal<Kryo> kryoThreadLocal = ThreadLocal.withInitial(() -> {
         Kryo kryo = new Kryo();
         kryo.register(RpcResponse.class);
@@ -25,10 +25,11 @@ public class KryoSerializer implements CommonSerializer{
         kryo.setRegistrationRequired(false);
         return kryo;
     });
+
     @Override
     public byte[] serialize(Object obj) {
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-             Output output = new Output(byteArrayOutputStream)){
+             Output output = new Output(byteArrayOutputStream)) {
             Kryo kryo = kryoThreadLocal.get();
             kryo.writeObject(output, obj);
             kryoThreadLocal.remove();

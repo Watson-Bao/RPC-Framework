@@ -5,20 +5,17 @@ import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.ResponseCode;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.Socket;
 
 /**
  * 进行过程调用的处理器
+ *
  * @author watson
  */
 @Slf4j
-public class RequestHandler{
-    public Object handle(RpcRequest rpcRequest, Object service){
+public class RequestHandler {
+    public Object handle(RpcRequest rpcRequest, Object service) {
         Object result = null;
 
         try {
@@ -32,6 +29,7 @@ public class RequestHandler{
 
     /**
      * 通过传输过来的request中方法的相关信息反射出目标方法并执行
+     *
      * @param rpcRequest
      * @param service
      * @return
