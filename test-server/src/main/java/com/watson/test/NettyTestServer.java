@@ -5,6 +5,7 @@ import com.watson.rpc.api.HelloService;
 import com.watson.rpc.netty.server.NettyServer;
 import com.watson.rpc.registry.DefaultServiceRegistry;
 import com.watson.rpc.registry.ServiceRegistry;
+import com.watson.rpc.serializer.JsonSerializer;
 import com.watson.rpc.serializer.KryoSerializer;
 
 /**

@@ -8,7 +8,6 @@ import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.serializer.CommonSerializer;
-import com.watson.rpc.serializer.HessianSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

@@ -9,7 +9,6 @@ import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.serializer.CommonSerializer;
 import com.watson.rpc.utils.ObjectReader;
 import com.watson.rpc.utils.ObjectWriter;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
