@@ -1,5 +1,6 @@
 package com.watson.test;
 
+import com.watson.rpc.RpcServer;
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.netty.server.NettyServer;
 import com.watson.rpc.registry.DefaultServiceRegistry;
@@ -16,7 +17,7 @@ public class NettyTestServer {
         HelloService helloService = new HelloServiceImpl();
         ServiceRegistry registry = new DefaultServiceRegistry();
         registry.register(helloService);
-        NettyServer server = new NettyServer();
+        RpcServer server = new NettyServer();
         server.setSerializer(new KryoSerializer());
         server.start(9999);
     }

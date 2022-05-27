@@ -23,13 +23,16 @@ import java.net.Socket;
  * @author watson
  */
 @Slf4j
-@AllArgsConstructor
 public class SocketClient implements RpcClient {
 
     private final String host;
     private final int port;
     private CommonSerializer serializer;
 
+    public SocketClient(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
 
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {

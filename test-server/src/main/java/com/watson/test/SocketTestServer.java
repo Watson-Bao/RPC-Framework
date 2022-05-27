@@ -1,5 +1,6 @@
 package com.watson.test;
 
+import com.watson.rpc.RpcServer;
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.registry.DefaultServiceRegistry;
 import com.watson.rpc.registry.ServiceRegistry;
@@ -14,7 +15,7 @@ public class SocketTestServer {
         HelloService helloService = new HelloServiceImpl();
         ServiceRegistry serviceRegistry = new DefaultServiceRegistry();
         serviceRegistry.register(helloService);
-        SocketServer socketServer = new SocketServer(serviceRegistry);
+        RpcServer socketServer = new SocketServer(serviceRegistry);
         socketServer.setSerializer(new HessianSerializer());
         socketServer.start(9000);
     }
