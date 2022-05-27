@@ -1,20 +1,23 @@
-package com.watson.rpc.socket.client;
+package com.watson.rpc.transport.socket.client;
 
-import com.watson.rpc.RpcClient;
+import com.watson.rpc.registry.NacosServiceRegistry;
+import com.watson.rpc.registry.ServiceRegistry;
+import com.watson.rpc.transport.RpcClient;
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.serializer.CommonSerializer;
-import com.watson.rpc.utils.ObjectReader;
-import com.watson.rpc.utils.ObjectWriter;
+import com.watson.rpc.transport.utils.ObjectReader;
+import com.watson.rpc.transport.utils.ObjectWriter;
 import com.watson.rpc.utils.RpcMessageChecker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
@@ -25,13 +28,11 @@ import java.net.Socket;
 @Slf4j
 public class SocketClient implements RpcClient {
 
-    private final String host;
-    private final int port;
+    private final ServiceRegistry serviceRegistry;
     private CommonSerializer serializer;
 
-    public SocketClient(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public SocketClient() {
+        this.serviceRegistry = new NacosServiceRegistry();
     }
 
     @Override
@@ -40,7 +41,9 @@ public class SocketClient implements RpcClient {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        try (Socket socket = new Socket(host, port)) {
+        InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+        try (Socket socket = new Socket()) {
+            socket.connect(inetSocketAddress);
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
             ObjectWriter.writeObject(outputStream, rpcRequest, serializer);

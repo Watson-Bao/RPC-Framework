@@ -1,4 +1,4 @@
-package com.watson.rpc.registry;
+package com.watson.rpc.provider;
 
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
@@ -9,22 +9,16 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 默认的服务注册表
- *
+ * 默认的服务注册表，保存服务端本地服务
  * @author watson
  */
 @Slf4j
-public class DefaultServiceRegistry implements ServiceRegistry {
+public class ServiceProviderImpl implements ServiceProvider {
     private static final Map<String, Object> serviceMap = new ConcurrentHashMap<>();
     private static final Set<String> registeredService = ConcurrentHashMap.newKeySet();
 
-    /**
-     * 将一个服务注册进注册表
-     *
-     * @param service 待注册的服务实体
-     */
     @Override
-    public <T> void register(T service) {
+    public <T> void addServiceProvider(T service) {
         String serviceName = service.getClass().getCanonicalName();
         if (registeredService.contains(serviceName)) {
             return;
@@ -40,14 +34,8 @@ public class DefaultServiceRegistry implements ServiceRegistry {
         }
     }
 
-    /**
-     * 根据服务名称获取服务实体
-     *
-     * @param serviceName 服务名称
-     * @return 服务实体
-     */
     @Override
-    public Object getService(String serviceName) {
+    public Object getServiceProvider(String serviceName) {
         Object service = serviceMap.get(serviceName);
         if (service == null) {
             throw new RpcException(RpcError.SERVICE_NOT_FOUND);

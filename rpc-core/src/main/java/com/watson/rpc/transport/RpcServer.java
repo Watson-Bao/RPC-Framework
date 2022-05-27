@@ -1,4 +1,4 @@
-package com.watson.rpc;
+package com.watson.rpc.transport;
 
 import com.watson.rpc.serializer.CommonSerializer;
 
@@ -10,10 +10,8 @@ import com.watson.rpc.serializer.CommonSerializer;
 public interface RpcServer {
     /**
      * 服务器端开始监听请求
-     *
-     * @param port
      */
-    void start(int port);
+    void start();
 
     /**
      * 设置序列化器
@@ -21,4 +19,12 @@ public interface RpcServer {
      * @param serializer
      */
     void setSerializer(CommonSerializer serializer);
+
+    /**
+     * 服务器端发布服务
+     * @param service
+     * @param serviceClass
+     * @param <T>
+     */
+    <T> void publishService(Object service, Class<T> serviceClass);
 }

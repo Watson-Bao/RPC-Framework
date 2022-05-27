@@ -5,7 +5,7 @@
     <parent>
         <artifactId>RPC-Framework</artifactId>
         <groupId>com.watson</groupId>
-        <version>2.0-SNAPSHOT</version>
+        <version>3.0.0-SNATHOST</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -52,7 +52,6 @@
             <artifactId>protostuff-runtime</artifactId>
             <version>1.8.0</version>
         </dependency>
-
 
     </dependencies>
 

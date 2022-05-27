@@ -1,4 +1,4 @@
-package com.watson.rpc.netty.client;
+package com.watson.rpc.transport.netty.client;
 
 import com.watson.rpc.entity.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;

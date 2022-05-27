@@ -1,12 +1,12 @@
-package com.watson.rpc.socket.server;
+package com.watson.rpc.transport.socket.server;
 
-import com.watson.rpc.RequestHandler;
+import com.watson.rpc.handler.RequestHandler;
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.registry.ServiceRegistry;
 import com.watson.rpc.serializer.CommonSerializer;
-import com.watson.rpc.utils.ObjectReader;
-import com.watson.rpc.utils.ObjectWriter;
+import com.watson.rpc.transport.utils.ObjectReader;
+import com.watson.rpc.transport.utils.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -39,8 +39,7 @@ public class RequestHandlerThread implements Runnable {
              OutputStream outputStream = socket.getOutputStream()) {
             RpcRequest rpcRequest = (RpcRequest) ObjectReader.readObject(inputStream);
             String interfaceName = rpcRequest.getInterfaceName();
-            Object service = serviceRegistry.getService(interfaceName);
-            RpcResponse<Object> response = requestHandler.handle(rpcRequest, service);
+            RpcResponse<Object> response = requestHandler.handle(rpcRequest);
             ObjectWriter.writeObject(outputStream, response, serializer);
         } catch (IOException e) {
             log.error("调用或发送时有错误发生：", e);

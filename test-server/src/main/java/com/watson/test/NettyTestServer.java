@@ -1,11 +1,10 @@
 package com.watson.test;
 
-import com.watson.rpc.RpcServer;
+import com.watson.rpc.serializer.ProtobufSerializer;
+import com.watson.rpc.transport.RpcServer;
 import com.watson.rpc.api.HelloService;
-import com.watson.rpc.netty.server.NettyServer;
-import com.watson.rpc.registry.DefaultServiceRegistry;
-import com.watson.rpc.registry.ServiceRegistry;
-import com.watson.rpc.serializer.Hessian2Serializer;
+import com.watson.rpc.transport.netty.server.NettyServer;
+
 
 /**
  * 测试用Netty服务提供者（服务端）
@@ -15,10 +14,8 @@ import com.watson.rpc.serializer.Hessian2Serializer;
 public class NettyTestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
-        ServiceRegistry registry = new DefaultServiceRegistry();
-        registry.register(helloService);
-        RpcServer server = new NettyServer();
-        server.setSerializer(new Hessian2Serializer());
-        server.start(9999);
+        RpcServer server = new NettyServer("127.0.0.1", 9999);
+        server.setSerializer(new ProtobufSerializer());
+        server.publishService(helloService, HelloService.class);
     }
 }

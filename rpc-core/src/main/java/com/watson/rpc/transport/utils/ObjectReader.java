@@ -1,4 +1,4 @@
-package com.watson.rpc.utils;
+package com.watson.rpc.transport.utils;
 
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;

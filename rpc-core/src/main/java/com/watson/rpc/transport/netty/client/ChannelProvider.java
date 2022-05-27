@@ -1,4 +1,4 @@
-package com.watson.rpc.netty.client;
+package com.watson.rpc.transport.netty.client;
 
 import com.watson.rpc.codec.CommonDecoder;
 import com.watson.rpc.codec.CommonEncoder;

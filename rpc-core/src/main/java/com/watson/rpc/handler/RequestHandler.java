@@ -1,8 +1,10 @@
-package com.watson.rpc;
+package com.watson.rpc.handler;
 
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.ResponseCode;
+import com.watson.rpc.provider.ServiceProvider;
+import com.watson.rpc.provider.ServiceProviderImpl;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,9 +17,14 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 public class RequestHandler {
-    public RpcResponse<Object> handle(RpcRequest rpcRequest, Object service) {
-        RpcResponse<Object> response = null;
+    private static final ServiceProvider serviceProvider;
 
+    static {
+        serviceProvider = new ServiceProviderImpl();
+    }
+    public RpcResponse<Object> handle(RpcRequest rpcRequest) {
+        RpcResponse<Object> response = null;
+        Object service = serviceProvider.getServiceProvider(rpcRequest.getInterfaceName());
         try {
             response = invokeTargetMethod(rpcRequest, service);
             log.info("服务:{} 成功调用方法:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
