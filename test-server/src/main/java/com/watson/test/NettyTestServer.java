@@ -4,6 +4,7 @@ import com.watson.rpc.api.HelloService;
 import com.watson.rpc.netty.server.NettyServer;
 import com.watson.rpc.registry.DefaultServiceRegistry;
 import com.watson.rpc.registry.ServiceRegistry;
+import com.watson.rpc.serializer.KryoSerializer;
 
 /**
  * 测试用Netty服务提供者（服务端）
@@ -16,6 +17,7 @@ public class NettyTestServer {
         ServiceRegistry registry = new DefaultServiceRegistry();
         registry.register(helloService);
         NettyServer server = new NettyServer();
+        server.setSerializer(new KryoSerializer());
         server.start(9999);
     }
 }
