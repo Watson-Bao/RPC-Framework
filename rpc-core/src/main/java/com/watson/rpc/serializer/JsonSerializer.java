@@ -27,7 +27,7 @@ public class JsonSerializer implements CommonSerializer {
         if (obj instanceof RpcRequest) {
             obj = handleRequest(obj);
         }
-        log.info("deserialized---"+obj.toString());
+        log.info("deserialized---" + obj.toString());
         return obj;
     }
 
