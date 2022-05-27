@@ -5,7 +5,8 @@ import com.watson.rpc.RpcClientProxy;
 import com.watson.rpc.api.HelloObject;
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.netty.client.NettyClient;
-import com.watson.rpc.serializer.JsonSerializer;
+import com.watson.rpc.serializer.Hessian2Serializer;
+
 
 /**
  * 测试用Netty消费者
@@ -15,7 +16,7 @@ import com.watson.rpc.serializer.JsonSerializer;
 public class NettyTestClient {
     public static void main(String[] args) {
         RpcClient client = new NettyClient("127.0.0.1", 9999);
-        client.setSerializer(new JsonSerializer());
+        client.setSerializer(new Hessian2Serializer());
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
         HelloObject object = new HelloObject(12, "This is a message");

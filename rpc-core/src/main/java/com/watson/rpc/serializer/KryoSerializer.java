@@ -13,6 +13,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
+ * 使用Kryo的序列化器
+ *
  * @author watson
  */
 @Slf4j

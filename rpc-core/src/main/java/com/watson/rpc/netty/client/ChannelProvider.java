@@ -19,14 +19,14 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 用于获取 Channel 对象
+ *
  * @author watson
  */
 @Slf4j
 public class ChannelProvider {
+    private static final int MAX_RETRY_COUNT = 5;
     private static EventLoopGroup eventLoopGroup;
     private static Bootstrap bootstrap = initializeBootstrap();
-
-    private static final int MAX_RETRY_COUNT = 5;
     private static Channel channel = null;
 
     public static Channel get(InetSocketAddress inetSocketAddress, CommonSerializer serializer) {
