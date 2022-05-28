@@ -5,7 +5,7 @@
     <parent>
         <artifactId>RPC-Framework</artifactId>
         <groupId>com.watson</groupId>
-        <version>3.0.0-SNATHOST</version>
+        <version>3.1.0-SNATHOST</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
