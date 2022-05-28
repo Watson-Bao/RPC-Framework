@@ -4,7 +4,7 @@ import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.handler.RpcRequestHandler;
 import com.watson.rpc.remote.to.RpcRequest;
 import com.watson.rpc.remote.to.RpcResponse;
-import com.watson.rpc.utils.ThreadPoolFactory;
+import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,7 +28,7 @@ public class NettyRpcServerHandler extends SimpleChannelInboundHandler<RpcReques
     private static final ExecutorService threadPool;
 
     static {
-        threadPool = ThreadPoolFactory.createDefaultThreadPool(THREAD_NAME_PREFIX);
+        threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent(THREAD_NAME_PREFIX);
     }
 
     private RpcRequestHandler rpcRequestHandler;

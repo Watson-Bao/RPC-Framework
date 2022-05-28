@@ -8,7 +8,7 @@ import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
 import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.serializer.CommonSerializer;
-import com.watson.rpc.utils.ThreadPoolFactory;
+import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class SocketRpcServer implements RpcServer {
 
     public SocketRpcServer(String host, int port) {
         this.port = port;
-        threadPool = ThreadPoolFactory.createDefaultThreadPool("socket-rpc-server");
+        threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-rpc-server");
     }
 
     @Override
