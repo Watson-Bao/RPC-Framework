@@ -1,11 +1,12 @@
 package com.watson.test;
 
+import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.transport.RpcClient;
 import com.watson.rpc.transport.RpcClientProxy;
 import com.watson.rpc.api.HelloObject;
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.serializer.KryoSerializer;
-import com.watson.rpc.transport.socket.client.SocketClient;
+import com.watson.rpc.transport.socket.client.SocketRpcClient;
 
 /**
  * 测试用消费者（客户端）
@@ -14,12 +15,13 @@ import com.watson.rpc.transport.socket.client.SocketClient;
  */
 public class SocketTestClient {
     public static void main(String[] args) {
-        RpcClient client = new SocketClient();
+        RpcClient client = new SocketRpcClient();
         client.setSerializer(new KryoSerializer());
-        RpcClientProxy proxy = new RpcClientProxy(client);
-        HelloService helloService = proxy.getProxy(HelloService.class);
+        RpcServiceConfig rpcServiceConfig=RpcServiceConfig.builder().group("socket").version("version2").build();
+        RpcClientProxy rpcClientProxy = new RpcClientProxy(client,rpcServiceConfig);
+        HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
         HelloObject object = new HelloObject(121, "This is a message");
-        String res = helloService.hello(object, "1111111111");
+        String res = helloService.hello(object, "Socket---");
         System.out.println(res);
     }
 }

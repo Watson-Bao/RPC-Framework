@@ -11,14 +11,14 @@ import lombok.extern.slf4j.Slf4j;
  * @author watson
  */
 @Slf4j
-public class NettyClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
+public class NettyRpcClientHandler extends SimpleChannelInboundHandler<RpcResponse<Object>> {
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, RpcResponse msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, RpcResponse<Object> msg) throws Exception {
         try {
             log.info(String.format("客户端接收到消息: %s", msg));
-            AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse" + msg.getRequestId());
+            AttributeKey<RpcResponse<Object>> key = AttributeKey.valueOf("rpcResponse" + msg.getRequestId());
             ctx.channel().attr(key).set(msg);
             ctx.channel().close();
         } finally {

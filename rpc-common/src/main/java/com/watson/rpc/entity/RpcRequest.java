@@ -39,4 +39,17 @@ public class RpcRequest implements Serializable {
      * 调用方法的参数类型
      */
     private Class<?>[] paramTypes;
+
+    /**
+     * 版本号
+     */
+    private String version;
+    /**
+     * 分组
+     */
+    private String group;
+
+    public String getRpcServiceName() {
+        return this.getInterfaceName() +"-"+ this.getGroup() +"-"+ this.getVersion();
+    }
 }

@@ -1,9 +1,10 @@
 package com.watson.test;
 
+import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.serializer.ProtobufSerializer;
 import com.watson.rpc.transport.RpcServer;
 import com.watson.rpc.api.HelloService;
-import com.watson.rpc.transport.netty.server.NettyServer;
+import com.watson.rpc.transport.netty.server.NettyRpcServer;
 
 
 /**
@@ -14,8 +15,11 @@ import com.watson.rpc.transport.netty.server.NettyServer;
 public class NettyTestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
-        RpcServer server = new NettyServer("127.0.0.1", 9999);
-        server.setSerializer(new ProtobufSerializer());
-        server.publishService(helloService, HelloService.class);
+        RpcServer nettyRpcServer = new NettyRpcServer(9999);
+        nettyRpcServer.setSerializer(new ProtobufSerializer());
+        RpcServiceConfig rpcServiceConfig = RpcServiceConfig.builder()
+                .group("netty").version("version1").service(helloService).build();
+        nettyRpcServer.registerService(rpcServiceConfig);
+        nettyRpcServer.start();
     }
 }

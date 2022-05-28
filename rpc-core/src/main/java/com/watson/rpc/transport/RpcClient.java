@@ -10,12 +10,12 @@ import com.watson.rpc.serializer.CommonSerializer;
  */
 public interface RpcClient {
     /**
-     * 客户端发送请求
+     * 客户端发送请求并获取结果
      *
      * @param rpcRequest
      * @return
      */
-    Object sendRequest(RpcRequest rpcRequest);
+    Object sendRpcRequest(RpcRequest rpcRequest);
 
     /**
      * 设置序列化器

@@ -37,7 +37,7 @@ public class ChannelProvider {
                 // RpcResponse -> ByteBuf
                 ch.pipeline().addLast(new CommonEncoder(serializer))
                         .addLast(new CommonDecoder())
-                        .addLast(new NettyClientHandler());
+                        .addLast(new NettyRpcClientHandler());
             }
         });
         CountDownLatch countDownLatch = new CountDownLatch(1);

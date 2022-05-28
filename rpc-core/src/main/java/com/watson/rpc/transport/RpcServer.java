@@ -1,5 +1,6 @@
 package com.watson.rpc.transport;
 
+import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.serializer.CommonSerializer;
 
 /**
@@ -22,9 +23,8 @@ public interface RpcServer {
 
     /**
      * 服务器端发布服务
-     * @param service
-     * @param serviceClass
-     * @param <T>
+     * @param rpcServiceConfig
      */
-    <T> void publishService(Object service, Class<T> serviceClass);
+    void registerService(RpcServiceConfig rpcServiceConfig);
 }
+

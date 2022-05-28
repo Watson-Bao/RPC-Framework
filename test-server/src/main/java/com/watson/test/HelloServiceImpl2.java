@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author watson
  */
 @Slf4j
-public class HelloServiceImpl implements HelloService {
+public class HelloServiceImpl2 implements HelloService {
     /**
      * 测试用api的接口
      *
@@ -18,6 +18,6 @@ public class HelloServiceImpl implements HelloService {
     @Override
     public String hello(HelloObject object, String code) {
         log.info("接收到：{}", object.getMessage());
-        return code + "这是通过Netty调用方法的返回值，id=" + object.getId();
+        return code + "这是通过Socket调用方法的返回值，id=" + object.getId();
     }
 }

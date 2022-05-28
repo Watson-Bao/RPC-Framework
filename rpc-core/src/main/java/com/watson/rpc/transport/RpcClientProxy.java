@@ -1,13 +1,18 @@
 package com.watson.rpc.transport;
 
+import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.entity.RpcRequest;
-import lombok.AllArgsConstructor;
+import com.watson.rpc.entity.RpcResponse;
+import com.watson.rpc.transport.netty.client.NettyRpcClient;
+import com.watson.rpc.transport.socket.client.SocketRpcClient;
+import com.watson.rpc.utils.RpcMessageChecker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * RPC客户端动态代理
@@ -15,10 +20,21 @@ import java.util.UUID;
  * @author watson
  */
 @Slf4j
-@AllArgsConstructor
 public class RpcClientProxy implements InvocationHandler {
 
-    private final RpcClient client;
+    private final RpcClient rpcClient;
+    private final RpcServiceConfig rpcServiceConfig;
+
+    public RpcClientProxy(RpcClient rpcClient, RpcServiceConfig rpcServiceConfig) {
+        this.rpcClient = rpcClient;
+        this.rpcServiceConfig = rpcServiceConfig;
+    }
+
+
+    public RpcClientProxy(RpcClient rpcClient) {
+        this.rpcClient = rpcClient;
+        this.rpcServiceConfig = new RpcServiceConfig();
+    }
 
     /**
      * 得到代理方法
@@ -37,8 +53,10 @@ public class RpcClientProxy implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) {
         log.info("调用方法: {}#{}", method.getDeclaringClass().getName(), method.getName());
         RpcRequest rpcRequest = new RpcRequest(UUID.randomUUID().toString(), method.getDeclaringClass().getName(),
-                method.getName(), args, method.getParameterTypes());
+                method.getName(), args, method.getParameterTypes(), rpcServiceConfig.getVersion(), rpcServiceConfig.getGroup());
 
-        return client.sendRequest(rpcRequest);
+        RpcResponse<Object> rpcResponse= (RpcResponse<Object>) rpcClient.sendRpcRequest(rpcRequest);
+        RpcMessageChecker.check(rpcRequest, rpcResponse);
+        return rpcResponse.getData();
     }
 }

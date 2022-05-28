@@ -3,6 +3,7 @@ package com.watson.rpc.handler;
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.ResponseCode;
+import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -16,15 +17,15 @@ import java.lang.reflect.Method;
  * @author watson
  */
 @Slf4j
-public class RequestHandler {
-    private static final ServiceProvider serviceProvider;
+public class RpcRequestHandler {
+    private final ServiceProvider serviceProvider;
 
-    static {
-        serviceProvider = new ServiceProviderImpl();
+    public RpcRequestHandler() {
+        serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
     }
     public RpcResponse<Object> handle(RpcRequest rpcRequest) {
         RpcResponse<Object> response = null;
-        Object service = serviceProvider.getServiceProvider(rpcRequest.getInterfaceName());
+        Object service = serviceProvider.getService(rpcRequest.getRpcServiceName());
         try {
             response = invokeTargetMethod(rpcRequest, service);
             log.info("服务:{} 成功调用方法:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());

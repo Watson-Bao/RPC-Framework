@@ -1,14 +1,13 @@
 package com.watson.rpc.transport.netty.client;
 
-import com.watson.rpc.registry.NacosServiceRegistry;
-import com.watson.rpc.registry.ServiceRegistry;
+import com.watson.rpc.registry.NacosServiceDiscovery;
+import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.transport.RpcClient;
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.serializer.CommonSerializer;
-import com.watson.rpc.utils.RpcMessageChecker;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -25,9 +24,9 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author watson
  */
 @Slf4j
-public class NettyClient implements RpcClient {
+public class NettyRpcClient implements RpcClient {
     private static final Bootstrap bootstrap;
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
     private CommonSerializer serializer;
 
     static {
@@ -39,8 +38,8 @@ public class NettyClient implements RpcClient {
     }
 
 
-    public NettyClient() {
-        this.serviceRegistry = new NacosServiceRegistry();
+    public NettyRpcClient() {
+        this.serviceDiscovery = new NacosServiceDiscovery();
     }
 
     /**
@@ -50,7 +49,7 @@ public class NettyClient implements RpcClient {
      * @return
      */
     @Override
-    public Object sendRequest(RpcRequest rpcRequest) {
+    public Object sendRpcRequest(RpcRequest rpcRequest) {
         if (serializer == null) {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
@@ -58,7 +57,7 @@ public class NettyClient implements RpcClient {
         AtomicReference<Object> result = new AtomicReference<>(null);
 
         try {
-            InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+            InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
             Channel channel = ChannelProvider.get(inetSocketAddress, serializer);
 
             if (channel.isActive()) {
@@ -70,11 +69,11 @@ public class NettyClient implements RpcClient {
                     }
                 });
                 channel.closeFuture().sync();
-                AttributeKey<RpcResponse> key = AttributeKey.valueOf("rpcResponse" + rpcRequest.getRequestId());
-                RpcResponse rpcResponse = channel.attr(key).get();
-                RpcMessageChecker.check(rpcRequest, rpcResponse);
-                result.set(rpcResponse.getData());
+                AttributeKey<RpcResponse<Object>> key = AttributeKey.valueOf("rpcResponse" + rpcRequest.getRequestId());
+                RpcResponse<Object> rpcResponse = channel.attr(key).get();
+                result.set(rpcResponse);
             } else {
+                channel.close();
                 System.exit(0);
             }
 

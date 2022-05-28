@@ -1,7 +1,7 @@
 package com.watson.rpc.transport.socket.client;
 
-import com.watson.rpc.registry.NacosServiceRegistry;
-import com.watson.rpc.registry.ServiceRegistry;
+import com.watson.rpc.registry.NacosServiceDiscovery;
+import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.transport.RpcClient;
 import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.entity.RpcResponse;
@@ -26,29 +26,29 @@ import java.net.Socket;
  * @author watson
  */
 @Slf4j
-public class SocketClient implements RpcClient {
+public class SocketRpcClient implements RpcClient {
 
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
     private CommonSerializer serializer;
 
-    public SocketClient() {
-        this.serviceRegistry = new NacosServiceRegistry();
+    public SocketRpcClient() {
+        this.serviceDiscovery = new NacosServiceDiscovery();
     }
 
     @Override
-    public Object sendRequest(RpcRequest rpcRequest) {
+    public Object sendRpcRequest(RpcRequest rpcRequest) {
         if (serializer == null) {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        InetSocketAddress inetSocketAddress = serviceRegistry.lookupService(rpcRequest.getInterfaceName());
+        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
         try (Socket socket = new Socket()) {
             socket.connect(inetSocketAddress);
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
             ObjectWriter.writeObject(outputStream, rpcRequest, serializer);
             Object obj = ObjectReader.readObject(inputStream);
-            RpcResponse rpcResponse = (RpcResponse) obj;
+            RpcResponse<Object> rpcResponse = (RpcResponse<Object>) obj;
             if (rpcResponse == null) {
                 log.error("服务调用失败，service：{}", rpcRequest.getInterfaceName());
                 throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
@@ -57,8 +57,7 @@ public class SocketClient implements RpcClient {
                 log.error("调用服务失败, service: {}, response:{}", rpcRequest.getInterfaceName(), rpcResponse);
                 throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
             }
-            RpcMessageChecker.check(rpcRequest, rpcResponse);
-            return rpcResponse.getData();
+            return rpcResponse;
         } catch (IOException e) {
             log.error("调用时有错误发生：", e);
             throw new RpcException("服务调用失败: ", e);
