@@ -25,15 +25,8 @@ public class RpcRequestHandler {
     }
 
     public RpcResponse<Object> handle(RpcRequest rpcRequest) {
-        RpcResponse<Object> response = null;
         Object service = serviceProvider.getService(rpcRequest.getRpcServiceName());
-        try {
-            response = invokeTargetMethod(rpcRequest, service);
-            log.info("服务:{} 成功调用方法:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            log.error("调用或发送时有错误发生：", e);
-        }
-        return response;
+        return invokeTargetMethod(rpcRequest, service);
     }
 
     /**
@@ -45,13 +38,15 @@ public class RpcRequestHandler {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    private RpcResponse<Object> invokeTargetMethod(RpcRequest rpcRequest, Object service) throws IllegalAccessException, InvocationTargetException {
-        Method method;
+    private RpcResponse<Object> invokeTargetMethod(RpcRequest rpcRequest, Object service) {
         try {
-            method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
+            Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
+            log.info("服务:{} 成功调用方法:{}", rpcRequest.getInterfaceName(), rpcRequest.getMethodName());
             return RpcResponse.success(method.invoke(service, rpcRequest.getParameters()), rpcRequest.getRequestId());
-        } catch (NoSuchMethodException e) {
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
+            log.error("调用或发送时有错误发生：", e);
             return RpcResponse.fail(ResponseCode.METHOD_NOT_FOUND, rpcRequest.getRequestId());
         }
+
     }
 }
