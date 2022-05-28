@@ -1,16 +1,14 @@
-package com.watson.rpc.transport.netty.server;
+package com.watson.rpc.remote.transport.netty.server;
 
+import com.watson.rpc.codec.CommonDecoder;
+import com.watson.rpc.codec.CommonEncoder;
 import com.watson.rpc.config.RpcServiceConfig;
+import com.watson.rpc.enume.RpcError;
+import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
-import com.watson.rpc.registry.NacosServiceRegistry;
-import com.watson.rpc.registry.ServiceRegistry;
-import com.watson.rpc.transport.RpcServer;
-import com.watson.rpc.codec.CommonDecoder;
-import com.watson.rpc.codec.CommonEncoder;
-import com.watson.rpc.enume.RpcError;
-import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -22,7 +20,6 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 /**
@@ -33,7 +30,7 @@ import java.net.UnknownHostException;
 @Slf4j
 public class NettyRpcServer implements RpcServer {
     private final int port;
-    private final ServiceProvider serviceProvider =SingletonFactory.getInstance(ServiceProviderImpl.class);
+    private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
     private CommonSerializer serializer;
 
     public NettyRpcServer(int port) {
@@ -42,7 +39,6 @@ public class NettyRpcServer implements RpcServer {
 
     /**
      * 服务器端开始监听请求
-     *
      */
     @Override
     public void start() {
@@ -101,10 +97,10 @@ public class NettyRpcServer implements RpcServer {
      */
     @Override
     public void registerService(RpcServiceConfig rpcServiceConfig) {
-            if(serializer == null) {
-                log.error("未设置序列化器");
-                throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
-            }
-            serviceProvider.publishService(rpcServiceConfig,port);
+        if (serializer == null) {
+            log.error("未设置序列化器");
+            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
+        }
+        serviceProvider.publishService(rpcServiceConfig, port);
     }
 }

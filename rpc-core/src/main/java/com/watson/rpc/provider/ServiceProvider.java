@@ -4,6 +4,7 @@ import com.watson.rpc.config.RpcServiceConfig;
 
 /**
  * 保存和提供服务实例对象
+ *
  * @author watson
  */
 public interface ServiceProvider {
@@ -19,6 +20,7 @@ public interface ServiceProvider {
 
     /**
      * 根据服务名称获取服务实体
+     *
      * @param rpcServiceName
      * @return
      */
@@ -26,6 +28,7 @@ public interface ServiceProvider {
 
     /**
      * 服务器端发布服务
+     *
      * @param rpcServiceConfig
      * @param port
      */

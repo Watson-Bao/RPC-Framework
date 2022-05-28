@@ -1,8 +1,8 @@
 package com.watson.rpc.serializer;
 
 import com.alibaba.fastjson.JSON;
-import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.enume.SerializerCode;
+import com.watson.rpc.remote.to.RpcRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;

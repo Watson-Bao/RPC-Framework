@@ -1,7 +1,6 @@
 package com.watson.rpc.registry;
 
-import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.entity.RpcRequest;
+import com.watson.rpc.remote.to.RpcRequest;
 
 import java.net.InetSocketAddress;
 

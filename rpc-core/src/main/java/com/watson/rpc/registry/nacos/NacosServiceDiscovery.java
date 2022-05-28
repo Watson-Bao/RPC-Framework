@@ -1,15 +1,16 @@
-package com.watson.rpc.registry;
+package com.watson.rpc.registry.nacos;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
-import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.entity.RpcRequest;
-import com.watson.rpc.registry.utils.NacosUtil;
+import com.watson.rpc.registry.ServiceDiscovery;
+import com.watson.rpc.registry.nacos.utils.NacosUtil;
+import com.watson.rpc.remote.to.RpcRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+
 /**
  * @author watson
  */
@@ -21,6 +22,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
     public NacosServiceDiscovery() {
         namingService = NacosUtil.getNacosNamingService();
     }
+
     /**
      * 根据服务名称查找服务实体连接地址
      *

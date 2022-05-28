@@ -3,10 +3,10 @@ package com.watson.rpc.serializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.watson.rpc.entity.RpcRequest;
-import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.SerializerCode;
 import com.watson.rpc.exception.SerializeException;
+import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.to.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;

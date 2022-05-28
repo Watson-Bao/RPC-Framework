@@ -1,7 +1,7 @@
 package com.watson.rpc.codec;
 
-import com.watson.rpc.entity.RpcRequest;
 import com.watson.rpc.enume.PackageType;
+import com.watson.rpc.remote.to.RpcRequest;
 import com.watson.rpc.serializer.CommonSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

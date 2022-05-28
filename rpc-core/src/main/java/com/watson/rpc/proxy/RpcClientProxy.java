@@ -1,18 +1,16 @@
-package com.watson.rpc.transport;
+package com.watson.rpc.proxy;
 
 import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.entity.RpcRequest;
-import com.watson.rpc.entity.RpcResponse;
-import com.watson.rpc.transport.netty.client.NettyRpcClient;
-import com.watson.rpc.transport.socket.client.SocketRpcClient;
-import com.watson.rpc.utils.RpcMessageChecker;
+import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.transport.RpcClient;
+import com.watson.rpc.remote.utils.RpcMessageChecker;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * RPC客户端动态代理
@@ -55,7 +53,7 @@ public class RpcClientProxy implements InvocationHandler {
         RpcRequest rpcRequest = new RpcRequest(UUID.randomUUID().toString(), method.getDeclaringClass().getName(),
                 method.getName(), args, method.getParameterTypes(), rpcServiceConfig.getVersion(), rpcServiceConfig.getGroup());
 
-        RpcResponse<Object> rpcResponse= (RpcResponse<Object>) rpcClient.sendRpcRequest(rpcRequest);
+        RpcResponse<Object> rpcResponse = (RpcResponse<Object>) rpcClient.sendRpcRequest(rpcRequest);
         RpcMessageChecker.check(rpcRequest, rpcResponse);
         return rpcResponse.getData();
     }

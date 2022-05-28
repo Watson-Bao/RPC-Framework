@@ -1,18 +1,19 @@
-package com.watson.rpc.transport.socket.server;
+package com.watson.rpc.remote.transport.socket.server;
 
 import com.watson.rpc.config.RpcServiceConfig;
+import com.watson.rpc.enume.RpcError;
+import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
-import com.watson.rpc.transport.RpcServer;
-import com.watson.rpc.enume.RpcError;
-import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.serializer.CommonSerializer;
 import com.watson.rpc.utils.ThreadPoolFactory;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -23,10 +24,11 @@ import java.util.concurrent.ExecutorService;
 @Slf4j
 public class SocketRpcServer implements RpcServer {
 
-    private final ExecutorService threadPool;;
+    private final ExecutorService threadPool;
+    ;
     private final int port;
-    private CommonSerializer serializer;
     private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
+    private CommonSerializer serializer;
 
     public SocketRpcServer(String host, int port) {
         this.port = port;
@@ -69,10 +71,10 @@ public class SocketRpcServer implements RpcServer {
      */
     @Override
     public void registerService(RpcServiceConfig rpcServiceConfig) {
-        if(serializer == null) {
+        if (serializer == null) {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        serviceProvider.publishService(rpcServiceConfig,port);
+        serviceProvider.publishService(rpcServiceConfig, port);
     }
 }

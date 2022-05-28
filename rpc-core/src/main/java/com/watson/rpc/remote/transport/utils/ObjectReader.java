@@ -1,10 +1,10 @@
-package com.watson.rpc.transport.utils;
+package com.watson.rpc.remote.transport.utils;
 
-import com.watson.rpc.entity.RpcRequest;
-import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.PackageType;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.to.RpcResponse;
 import com.watson.rpc.serializer.CommonSerializer;
 import lombok.extern.slf4j.Slf4j;
 

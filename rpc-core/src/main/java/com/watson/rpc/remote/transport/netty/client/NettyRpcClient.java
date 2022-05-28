@@ -1,12 +1,12 @@
-package com.watson.rpc.transport.netty.client;
+package com.watson.rpc.remote.transport.netty.client;
 
-import com.watson.rpc.registry.NacosServiceDiscovery;
-import com.watson.rpc.registry.ServiceDiscovery;
-import com.watson.rpc.transport.RpcClient;
-import com.watson.rpc.entity.RpcRequest;
-import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.registry.ServiceDiscovery;
+import com.watson.rpc.registry.nacos.NacosServiceDiscovery;
+import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -26,8 +26,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class NettyRpcClient implements RpcClient {
     private static final Bootstrap bootstrap;
-    private final ServiceDiscovery serviceDiscovery;
-    private CommonSerializer serializer;
 
     static {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -36,6 +34,9 @@ public class NettyRpcClient implements RpcClient {
                 .channel(NioSocketChannel.class)
                 .option(ChannelOption.SO_KEEPALIVE, true);
     }
+
+    private final ServiceDiscovery serviceDiscovery;
+    private CommonSerializer serializer;
 
 
     public NettyRpcClient() {

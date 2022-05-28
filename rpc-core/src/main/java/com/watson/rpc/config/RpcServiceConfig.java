@@ -28,7 +28,7 @@ public class RpcServiceConfig {
     private Object service;
 
     public String getRpcServiceName() {
-        return this.getInterfaceName() +"-"+ this.getGroup() +"-"+ this.getVersion();
+        return this.getInterfaceName() + "-" + this.getGroup() + "-" + this.getVersion();
     }
 
     public String getInterfaceName() {

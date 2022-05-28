@@ -1,6 +1,6 @@
-package com.watson.rpc.transport.netty.client;
+package com.watson.rpc.remote.transport.netty.client;
 
-import com.watson.rpc.entity.RpcResponse;
+import com.watson.rpc.remote.to.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;

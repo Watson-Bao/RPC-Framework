@@ -1,11 +1,11 @@
 package com.watson.rpc.handler;
 
-import com.watson.rpc.entity.RpcRequest;
-import com.watson.rpc.entity.RpcResponse;
 import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
+import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.to.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +23,7 @@ public class RpcRequestHandler {
     public RpcRequestHandler() {
         serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
     }
+
     public RpcResponse<Object> handle(RpcRequest rpcRequest) {
         RpcResponse<Object> response = null;
         Object service = serviceProvider.getService(rpcRequest.getRpcServiceName());

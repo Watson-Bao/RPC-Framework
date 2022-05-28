@@ -3,8 +3,8 @@ package com.watson.rpc.provider;
 import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
-import com.watson.rpc.registry.NacosServiceRegistry;
 import com.watson.rpc.registry.ServiceRegistry;
+import com.watson.rpc.registry.nacos.NacosServiceRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 默认的服务注册表，保存服务端本地服务
+ *
  * @author watson
  */
 @Slf4j

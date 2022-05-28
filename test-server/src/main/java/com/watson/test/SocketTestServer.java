@@ -1,10 +1,10 @@
 package com.watson.test;
 
-import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.transport.RpcServer;
 import com.watson.rpc.api.HelloService;
+import com.watson.rpc.config.RpcServiceConfig;
+import com.watson.rpc.remote.transport.RpcServer;
+import com.watson.rpc.remote.transport.socket.server.SocketRpcServer;
 import com.watson.rpc.serializer.Hessian2Serializer;
-import com.watson.rpc.transport.socket.server.SocketRpcServer;
 
 /**
  * @author watson

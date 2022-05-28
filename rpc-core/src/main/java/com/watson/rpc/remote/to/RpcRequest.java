@@ -1,4 +1,4 @@
-package com.watson.rpc.entity;
+package com.watson.rpc.remote.to;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -50,6 +50,6 @@ public class RpcRequest implements Serializable {
     private String group;
 
     public String getRpcServiceName() {
-        return this.getInterfaceName() +"-"+ this.getGroup() +"-"+ this.getVersion();
+        return this.getInterfaceName() + "-" + this.getGroup() + "-" + this.getVersion();
     }
 }

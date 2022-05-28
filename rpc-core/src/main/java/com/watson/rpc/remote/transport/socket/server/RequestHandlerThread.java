@@ -1,12 +1,12 @@
-package com.watson.rpc.transport.socket.server;
+package com.watson.rpc.remote.transport.socket.server;
 
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.handler.RpcRequestHandler;
-import com.watson.rpc.entity.RpcRequest;
-import com.watson.rpc.entity.RpcResponse;
+import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.transport.utils.ObjectReader;
+import com.watson.rpc.remote.transport.utils.ObjectWriter;
 import com.watson.rpc.serializer.CommonSerializer;
-import com.watson.rpc.transport.utils.ObjectReader;
-import com.watson.rpc.transport.utils.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

@@ -13,7 +13,7 @@ public interface ServiceRegistry {
     /**
      * 将一个服务注册进注册表
      *
-     * @param rpcServiceConfig rpc服务相关信息
+     * @param rpcServiceConfig  rpc服务相关信息
      * @param inetSocketAddress 提供服务的地址
      */
     void register(RpcServiceConfig rpcServiceConfig, InetSocketAddress inetSocketAddress);
