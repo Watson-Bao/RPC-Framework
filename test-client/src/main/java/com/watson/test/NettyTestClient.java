@@ -7,6 +7,8 @@ import com.watson.rpc.proxy.RpcClientProxy;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
 import com.watson.rpc.serializer.Hessian2Serializer;
+import com.watson.rpc.serializer.JsonSerializer;
+import com.watson.rpc.serializer.KryoSerializer;
 
 
 /**
@@ -17,7 +19,7 @@ import com.watson.rpc.serializer.Hessian2Serializer;
 public class NettyTestClient {
     public static void main(String[] args) {
         RpcClient client = new NettyRpcClient();
-        client.setSerializer(new Hessian2Serializer());
+        client.setSerializer(new KryoSerializer());
         RpcServiceConfig rpcServiceConfig = RpcServiceConfig.builder().group("netty").version("version1").build();
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client, rpcServiceConfig);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
