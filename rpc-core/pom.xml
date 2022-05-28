@@ -23,11 +23,11 @@
             <version>${netty-version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-            <version>2.0.4</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba.fastjson2</groupId>-->
+<!--            <artifactId>fastjson2</artifactId>-->
+<!--            <version>2.0.6</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>com.esotericsoftware</groupId>
@@ -57,6 +57,13 @@
             <groupId>com.alibaba.nacos</groupId>
             <artifactId>nacos-client</artifactId>
             <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson2-test</artifactId>
+            <version>2.0.6</version>
+            <scope>system</scope>
+            <systemPath>E:/java project/fastjson2-2.0.6-20220528.183342-2.jar</systemPath>
         </dependency>
 
     </dependencies>

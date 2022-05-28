@@ -2,6 +2,7 @@ package com.watson.rpc.remote.transport.netty.server;
 
 import com.watson.rpc.codec.CommonDecoder;
 import com.watson.rpc.codec.CommonEncoder;
+import com.watson.rpc.config.CustomShutdownHook;
 import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
@@ -72,6 +73,7 @@ public class NettyRpcServer implements RpcServer {
                     });
             String host = InetAddress.getLocalHost().getHostAddress();
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
+            CustomShutdownHook.getCustomShutdownHook().clearAll();
             future.channel().closeFuture().sync();
 
         } catch (InterruptedException e) {

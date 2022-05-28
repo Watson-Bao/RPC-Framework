@@ -4,8 +4,8 @@ import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
-import com.watson.rpc.remote.to.RpcRequest;
-import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.dto.RpcRequest;
+import com.watson.rpc.remote.dto.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;

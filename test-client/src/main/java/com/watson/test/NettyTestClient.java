@@ -19,7 +19,7 @@ import com.watson.rpc.serializer.KryoSerializer;
 public class NettyTestClient {
     public static void main(String[] args) {
         RpcClient client = new NettyRpcClient();
-        client.setSerializer(new KryoSerializer());
+        client.setSerializer(new JsonSerializer());
         RpcServiceConfig rpcServiceConfig = RpcServiceConfig.builder().group("netty").version("version1").build();
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client, rpcServiceConfig);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);

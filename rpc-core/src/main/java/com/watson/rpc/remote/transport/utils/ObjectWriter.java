@@ -1,7 +1,7 @@
 package com.watson.rpc.remote.transport.utils;
 
 import com.watson.rpc.enume.PackageType;
-import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.serializer.CommonSerializer;
 
 import java.io.IOException;

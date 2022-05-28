@@ -2,8 +2,8 @@ package com.watson.rpc.remote.transport.socket.server;
 
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.handler.RpcRequestHandler;
-import com.watson.rpc.remote.to.RpcRequest;
-import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.dto.RpcRequest;
+import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.utils.ObjectReader;
 import com.watson.rpc.remote.transport.utils.ObjectWriter;
 import com.watson.rpc.serializer.CommonSerializer;
@@ -20,12 +20,12 @@ import java.net.Socket;
  * @author watson
  */
 @Slf4j
-public class RequestHandlerThread implements Runnable {
+public class SocketRequestHandlerThread implements Runnable {
     private final Socket socket;
     private final RpcRequestHandler rpcRequestHandler;
     private final CommonSerializer serializer;
 
-    public RequestHandlerThread(Socket socket, CommonSerializer serializer) {
+    public SocketRequestHandlerThread(Socket socket, CommonSerializer serializer) {
         this.socket = socket;
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
         this.serializer = serializer;

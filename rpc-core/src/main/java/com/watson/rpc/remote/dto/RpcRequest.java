@@ -1,4 +1,4 @@
-package com.watson.rpc.remote.to;
+package com.watson.rpc.remote.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

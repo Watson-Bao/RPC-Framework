@@ -1,8 +1,8 @@
 package com.watson.rpc.proxy;
 
 import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.remote.to.RpcRequest;
-import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.dto.RpcRequest;
+import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.utils.RpcMessageChecker;
 import lombok.extern.slf4j.Slf4j;

@@ -5,7 +5,7 @@ import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.utils.NacosUtil;
-import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.dto.RpcRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -17,11 +17,6 @@ import java.util.List;
 @Slf4j
 public class NacosServiceDiscovery implements ServiceDiscovery {
 
-    private final NamingService namingService;
-
-    public NacosServiceDiscovery() {
-        namingService = NacosUtil.getNacosNamingService();
-    }
 
     /**
      * 根据服务名称查找服务实体连接地址
@@ -32,7 +27,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
     @Override
     public InetSocketAddress lookupService(RpcRequest rpcRequest) {
         try {
-            List<Instance> instances = NacosUtil.getAllInstance(namingService, rpcRequest);
+            List<Instance> instances = NacosUtil.getAllInstance(rpcRequest);
             Instance instance = instances.get(0);
             return new InetSocketAddress(instance.getIp(), instance.getPort());
         } catch (NacosException e) {

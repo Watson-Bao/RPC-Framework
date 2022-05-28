@@ -1,6 +1,6 @@
 package com.watson.rpc.remote.transport;
 
-import com.watson.rpc.remote.to.RpcRequest;
+import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.serializer.CommonSerializer;
 
 /**

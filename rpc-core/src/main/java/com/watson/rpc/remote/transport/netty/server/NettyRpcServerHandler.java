@@ -2,8 +2,8 @@ package com.watson.rpc.remote.transport.netty.server;
 
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.handler.RpcRequestHandler;
-import com.watson.rpc.remote.to.RpcRequest;
-import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.dto.RpcRequest;
+import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;

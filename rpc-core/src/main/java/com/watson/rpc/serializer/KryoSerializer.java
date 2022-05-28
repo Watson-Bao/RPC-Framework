@@ -5,8 +5,8 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.watson.rpc.enume.SerializerCode;
 import com.watson.rpc.exception.SerializeException;
-import com.watson.rpc.remote.to.RpcRequest;
-import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.dto.RpcRequest;
+import com.watson.rpc.remote.dto.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;

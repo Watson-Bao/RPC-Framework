@@ -1,5 +1,6 @@
 package com.watson.rpc.remote.transport.socket.server;
 
+import com.watson.rpc.config.CustomShutdownHook;
 import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
@@ -12,6 +13,8 @@ import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -30,7 +33,7 @@ public class SocketRpcServer implements RpcServer {
     private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
     private CommonSerializer serializer;
 
-    public SocketRpcServer(String host, int port) {
+    public SocketRpcServer(int port) {
         this.port = port;
         threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-rpc-server");
     }
@@ -41,12 +44,15 @@ public class SocketRpcServer implements RpcServer {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+        try (ServerSocket serverSocket = new ServerSocket()) {
+            String host = InetAddress.getLocalHost().getHostAddress();
+            serverSocket.bind(new InetSocketAddress(host, port));
             log.info("服务器启动……");
+            CustomShutdownHook.getCustomShutdownHook().clearAll();
             Socket socket;
             while ((socket = serverSocket.accept()) != null) {
                 log.info("消费者连接: {}:{}", socket.getInetAddress(), socket.getPort());
-                threadPool.execute(new RequestHandlerThread(socket, serializer));
+                threadPool.execute(new SocketRequestHandlerThread(socket, serializer));
             }
             threadPool.shutdown();
         } catch (IOException e) {

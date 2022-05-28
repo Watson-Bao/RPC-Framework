@@ -1,4 +1,4 @@
-package com.watson.rpc.remote.to;
+package com.watson.rpc.remote.dto;
 
 import com.watson.rpc.enume.ResponseCode;
 import lombok.Data;

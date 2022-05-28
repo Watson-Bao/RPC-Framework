@@ -1,11 +1,11 @@
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;
-import com.watson.rpc.api.HelloObject;
 
+import java.util.Date;
 
 public class TestCase {
     public static void main(String[] args) {
-        Class<?>[] arrays= new Class[] { String.class, HelloObject.class, String.class};
+        Class<?>[] arrays= new Class[] { int.class, Date.class, String.class};
         Wrapper wrapper=new Wrapper();
         wrapper.setParameterTypes(arrays);
         String s = JSON.toJSONString(wrapper);

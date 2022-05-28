@@ -12,7 +12,7 @@ import com.watson.rpc.serializer.Hessian2Serializer;
 public class SocketTestServer {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl2();
-        RpcServer socketRpcServer = new SocketRpcServer("127.0.0.1", 9000);
+        RpcServer socketRpcServer = new SocketRpcServer(9000);
         socketRpcServer.setSerializer(new Hessian2Serializer());
         RpcServiceConfig rpcServiceConfig = RpcServiceConfig.builder()
                 .group("socket").version("version2").service(helloService).build();

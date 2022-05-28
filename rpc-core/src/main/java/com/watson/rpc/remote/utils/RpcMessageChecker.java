@@ -3,8 +3,8 @@ package com.watson.rpc.remote.utils;
 import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
-import com.watson.rpc.remote.to.RpcRequest;
-import com.watson.rpc.remote.to.RpcResponse;
+import com.watson.rpc.remote.dto.RpcRequest;
+import com.watson.rpc.remote.dto.RpcResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,7 +17,7 @@ public class RpcMessageChecker {
     private RpcMessageChecker() {
     }
 
-    public static void check(RpcRequest rpcRequest, RpcResponse rpcResponse) {
+    public static void check(RpcRequest rpcRequest, RpcResponse<Object> rpcResponse) {
         if (rpcResponse == null) {
             log.error("调用服务失败,serviceName:{}", rpcRequest.getInterfaceName());
             throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, INTERFACE_NAME + ":" + rpcRequest.getInterfaceName());
