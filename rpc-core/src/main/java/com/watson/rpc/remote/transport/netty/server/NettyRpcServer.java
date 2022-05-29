@@ -32,16 +32,16 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class NettyRpcServer implements RpcServer {
     private final int port;
-
-    private CommonSerializer serializer;
     private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
+    private CommonSerializer serializer;
+
     public NettyRpcServer(int port) {
-        this(port,new Hessian2Serializer());
+        this(port, new Hessian2Serializer());
     }
 
     public NettyRpcServer(int port, CommonSerializer serializer) {
         this.port = port;
-        this.serializer=serializer;
+        this.serializer = serializer;
     }
 
     /**

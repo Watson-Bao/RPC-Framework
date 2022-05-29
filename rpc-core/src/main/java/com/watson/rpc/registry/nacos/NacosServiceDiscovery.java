@@ -29,11 +29,11 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
     public InetSocketAddress lookupService(RpcRequest rpcRequest) {
         try {
             List<Instance> instances = NacosUtil.getAllInstance(rpcRequest);
-            if (instances !=null && instances.size()>0) {
+            if (instances != null && instances.size() > 0) {
                 Instance instance = instances.get(0);
                 log.info("成功找到服务地址:[{}:{}]", instance.getIp(), instance.getPort());
                 return new InetSocketAddress(instance.getIp(), instance.getPort());
-            }else {
+            } else {
                 throw new RpcException(RpcError.SERVICE_NOT_REGISTER);
             }
 

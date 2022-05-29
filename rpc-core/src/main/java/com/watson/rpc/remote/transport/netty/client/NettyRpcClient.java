@@ -94,7 +94,7 @@ public class NettyRpcClient implements RpcClient {
         long s = System.currentTimeMillis();
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
         long e = System.currentTimeMillis();
-        log.info("服务发现耗时：{}",e - s);
+        log.info("服务发现耗时：{}", e - s);
 
         // get  server address related channel
         Channel channel = getChannel(inetSocketAddress);

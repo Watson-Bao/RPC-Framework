@@ -1,11 +1,9 @@
 package com.watson.rpc.remote.transport.netty.client;
 
-import com.watson.rpc.enume.RpcMessageTypeEnum;
 import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.remote.constant.RpcConstants;
 import com.watson.rpc.remote.dto.RpcMessage;
-import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;

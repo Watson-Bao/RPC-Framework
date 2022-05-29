@@ -35,12 +35,12 @@ public class SocketRpcServer implements RpcServer {
     private CommonSerializer serializer;
 
     public SocketRpcServer(int port) {
-        this(port,new Hessian2Serializer());
+        this(port, new Hessian2Serializer());
     }
 
-    public SocketRpcServer(int port,CommonSerializer serializer) {
+    public SocketRpcServer(int port, CommonSerializer serializer) {
         this.port = port;
-        this.serializer=serializer;
+        this.serializer = serializer;
         threadPool = ThreadPoolFactoryUtils.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
     }
 

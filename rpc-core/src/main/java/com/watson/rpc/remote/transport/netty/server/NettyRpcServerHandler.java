@@ -1,13 +1,12 @@
 package com.watson.rpc.remote.transport.netty.server;
 
 import com.watson.rpc.enume.ResponseCode;
-import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.factory.SingletonFactory;
-import com.watson.rpc.remote.handler.RpcRequestHandler;
 import com.watson.rpc.remote.constant.RpcConstants;
 import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
+import com.watson.rpc.remote.handler.RpcRequestHandler;
 import com.watson.rpc.serializer.CommonSerializer;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -33,7 +32,7 @@ public class NettyRpcServerHandler extends SimpleChannelInboundHandler<Object> {
 
     public NettyRpcServerHandler(CommonSerializer serializer) {
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
-        this.serializer=serializer;
+        this.serializer = serializer;
     }
 
     @Override
