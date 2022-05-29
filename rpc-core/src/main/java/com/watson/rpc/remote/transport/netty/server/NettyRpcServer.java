@@ -41,7 +41,7 @@ public class NettyRpcServer implements RpcServer {
     @Override
     public void start() {
         CustomShutdownHook.getCustomShutdownHook().clearAll();
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
 
