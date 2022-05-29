@@ -62,8 +62,8 @@ public class NettyRpcClient implements RpcClient {
                         /*自定义序列化编解码器*/
                         // RpcResponse -> ByteBuf
                         p.addLast(new RpcMessageEncoder());
-                        // If no data is sent to the server within 15 seconds, a heartbeat request is sent
-                        p.addLast(new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS));
+                        // 客户端每隔10s检测读空闲的channel，检测到读空闲时，则发送一次心跳包
+                        p.addLast(new IdleStateHandler(10, 10, 0, TimeUnit.SECONDS));
                         // ByteBuf -> RpcRequest
                         p.addLast(new RpcMessageDecoder());
                         p.addLast(new NettyRpcClientHandler());
@@ -91,7 +91,11 @@ public class NettyRpcClient implements RpcClient {
         // build return value
         CompletableFuture<RpcResponse<Object>> resultFuture = new CompletableFuture<>();
         // get server address
+        long s = System.currentTimeMillis();
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
+        long e = System.currentTimeMillis();
+        log.info("服务发现耗时：{}",e - s);
+
         // get  server address related channel
         Channel channel = getChannel(inetSocketAddress);
         if (channel != null && channel.isActive()) {

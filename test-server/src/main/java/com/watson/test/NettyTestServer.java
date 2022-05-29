@@ -4,6 +4,7 @@ import com.watson.rpc.api.HelloService;
 import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.remote.transport.netty.server.NettyRpcServer;
+import com.watson.rpc.serializer.JsonSerializer;
 
 
 /**

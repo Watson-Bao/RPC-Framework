@@ -49,6 +49,7 @@ public class NacosUtil {
 
     public static List<Instance> getAllInstance(RpcRequest rpcRequest) throws NacosException {
         return namingService.getAllInstances(rpcRequest.getRpcServiceName(), rpcRequest.getGroup());
+
     }
 
     public static void clearRegistry() {

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 用于获取 Channel 对象
+ * 用于获取 Channel 对象(channel可以复用)
  *
  * @author watson
  */

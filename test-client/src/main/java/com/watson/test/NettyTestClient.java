@@ -6,6 +6,7 @@ import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.proxy.RpcClientProxy;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
+import com.watson.rpc.serializer.JsonSerializer;
 
 
 /**
@@ -20,17 +21,17 @@ public class NettyTestClient {
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client, rpcServiceConfig);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
 
-//        HelloObject object = new HelloObject(12, "This is a message");
-//        String res = helloService.hello(object, "Netty---");
-//        System.out.println(res);
+        HelloObject object = new HelloObject(12, "This is a message");
+        String res = helloService.hello(object, "Netty---");
+        System.out.println(res);
 
-        long s = System.currentTimeMillis();
-        for (int i = 0; i < 50; i++) {
-            String des = helloService.hello(new HelloObject(i, "This is a message~~~" + i), "Netty---");
-            System.out.println(des);
-        }
-        long e = System.currentTimeMillis();
-        System.out.println(e - s);
+//        long s = System.currentTimeMillis();
+//        for (int i = 0; i < 50; i++) {
+//            String des = helloService.hello(new HelloObject(i, "This is a message~~~" + i), "Netty---");
+//            System.out.println(des);
+//        }
+//        long e = System.currentTimeMillis();
+//        System.out.println(e - s);
 
 
     }

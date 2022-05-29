@@ -1,12 +1,14 @@
 package com.watson.rpc.proxy;
 
 import com.watson.rpc.config.RpcServiceConfig;
+import com.watson.rpc.enume.ResponseCode;
+import com.watson.rpc.enume.RpcError;
+import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
 import com.watson.rpc.remote.transport.socket.client.SocketRpcClient;
-import com.watson.rpc.remote.utils.RpcMessageChecker;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +19,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+
 /**
  * RPC客户端动态代理
  *
@@ -24,6 +27,7 @@ import java.util.concurrent.ExecutionException;
  */
 @Slf4j
 public class RpcClientProxy implements InvocationHandler {
+    private static final String INTERFACE_NAME = "interfaceName";
 
     private final RpcClient rpcClient;
     private final RpcServiceConfig rpcServiceConfig;
@@ -76,7 +80,23 @@ public class RpcClientProxy implements InvocationHandler {
         if (rpcClient instanceof SocketRpcClient) {
             rpcResponse = (RpcResponse<Object>) rpcClient.sendRpcRequest(rpcRequest);
         }
-        RpcMessageChecker.check(rpcRequest, rpcResponse);
+        check(rpcRequest, rpcResponse);
         return rpcResponse.getData();
+    }
+
+    public void check(RpcRequest rpcRequest, RpcResponse<Object> rpcResponse) {
+        if (rpcResponse == null) {
+            log.error("调用服务失败,serviceName:{}", rpcRequest.getInterfaceName());
+            throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, INTERFACE_NAME + ":" + rpcRequest.getInterfaceName());
+        }
+
+        if (!rpcRequest.getRequestId().equals(rpcResponse.getRequestId())) {
+            throw new RpcException(RpcError.RESPONSE_NOT_MATCH, INTERFACE_NAME + ":" + rpcRequest.getInterfaceName());
+        }
+
+        if (rpcResponse.getStatusCode() == null || !rpcResponse.getStatusCode().equals(ResponseCode.SUCCESS.getCode())) {
+            log.error("调用服务失败,serviceName:{},RpcResponse:{}", rpcRequest.getInterfaceName(), rpcResponse);
+            throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, INTERFACE_NAME + ":" + rpcRequest.getInterfaceName());
+        }
     }
 }

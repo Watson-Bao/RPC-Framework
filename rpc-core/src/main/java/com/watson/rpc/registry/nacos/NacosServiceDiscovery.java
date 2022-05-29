@@ -2,6 +2,8 @@ package com.watson.rpc.registry.nacos;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.watson.rpc.enume.RpcError;
+import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.utils.NacosUtil;
 import com.watson.rpc.remote.dto.RpcRequest;
@@ -27,9 +29,14 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
     public InetSocketAddress lookupService(RpcRequest rpcRequest) {
         try {
             List<Instance> instances = NacosUtil.getAllInstance(rpcRequest);
-            Instance instance = instances.get(0);
-            log.info("成功找到服务地址:[{}:{}]", instance.getIp(), instance.getPort());
-            return new InetSocketAddress(instance.getIp(), instance.getPort());
+            if (instances !=null && instances.size()>0) {
+                Instance instance = instances.get(0);
+                log.info("成功找到服务地址:[{}:{}]", instance.getIp(), instance.getPort());
+                return new InetSocketAddress(instance.getIp(), instance.getPort());
+            }else {
+                throw new RpcException(RpcError.SERVICE_NOT_REGISTER);
+            }
+
         } catch (NacosException e) {
             log.error("获取服务时有错误发生:", e);
         }
