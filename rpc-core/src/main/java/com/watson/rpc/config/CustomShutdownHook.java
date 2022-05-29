@@ -1,7 +1,7 @@
 package com.watson.rpc.config;
 
 import com.watson.rpc.registry.nacos.utils.NacosUtil;
-import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
+import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,7 +21,7 @@ public class CustomShutdownHook {
         log.info("addShutdownHook for clearAll");
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             NacosUtil.clearRegistry();
-            ThreadPoolFactoryUtil.shutDownAllThreadPool();
+            ThreadPoolFactoryUtils.shutDownAllThreadPool();
         }));
     }
 }

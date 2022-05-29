@@ -7,6 +7,7 @@ import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
 import com.watson.rpc.remote.transport.socket.client.SocketRpcClient;
 import com.watson.rpc.remote.utils.RpcMessageChecker;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationHandler;
@@ -51,6 +52,11 @@ public class RpcClientProxy implements InvocationHandler {
     }
 
 
+    /**
+     * 当你使用代理对象调用方法的时候实际会调用到这个方法。代理对象就是你通过上面的 getProxy 方法获取到的对象。
+     */
+    @SneakyThrows
+    @SuppressWarnings("unchecked")
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) {
         log.info("调用方法: {}#{}", method.getDeclaringClass().getName(), method.getName());

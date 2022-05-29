@@ -46,17 +46,7 @@ public class SocketRpcClient implements RpcClient {
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
             ObjectWriter.writeObject(outputStream, rpcRequest, serializer);
-            Object obj = ObjectReader.readObject(inputStream);
-            RpcResponse<Object> rpcResponse = (RpcResponse<Object>) obj;
-            if (rpcResponse == null) {
-                log.error("服务调用失败，service：{}", rpcRequest.getInterfaceName());
-                throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
-            }
-            if (rpcResponse.getStatusCode() == null || rpcResponse.getStatusCode() != ResponseCode.SUCCESS.getCode()) {
-                log.error("调用服务失败, service: {}, response:{}", rpcRequest.getInterfaceName(), rpcResponse);
-                throw new RpcException(RpcError.SERVICE_INVOCATION_FAILURE, " service:" + rpcRequest.getInterfaceName());
-            }
-            return rpcResponse;
+            return ObjectReader.readObject(inputStream);
         } catch (IOException e) {
             log.error("调用时有错误发生：", e);
             throw new RpcException("服务调用失败: ", e);

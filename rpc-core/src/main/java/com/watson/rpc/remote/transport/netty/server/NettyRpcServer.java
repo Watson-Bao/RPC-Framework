@@ -43,6 +43,7 @@ public class NettyRpcServer implements RpcServer {
      */
     @Override
     public void start() {
+        CustomShutdownHook.getCustomShutdownHook().clearAll();
         if (serializer == null) {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
@@ -72,8 +73,8 @@ public class NettyRpcServer implements RpcServer {
                         }
                     });
             String host = InetAddress.getLocalHost().getHostAddress();
+            // 绑定端口，同步等待绑定成功
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
-            CustomShutdownHook.getCustomShutdownHook().clearAll();
             future.channel().closeFuture().sync();
 
         } catch (InterruptedException e) {
@@ -81,6 +82,7 @@ public class NettyRpcServer implements RpcServer {
         } catch (UnknownHostException e) {
             log.error("occur exception when getHostAddress", e);
         } finally {
+            log.error("shutdown bossGroup and workerGroup");
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }

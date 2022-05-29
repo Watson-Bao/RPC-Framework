@@ -9,7 +9,7 @@ import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
 import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.serializer.CommonSerializer;
-import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
+import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -35,11 +35,12 @@ public class SocketRpcServer implements RpcServer {
 
     public SocketRpcServer(int port) {
         this.port = port;
-        threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
+        threadPool = ThreadPoolFactoryUtils.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
     }
 
     @Override
     public void start() {
+        CustomShutdownHook.getCustomShutdownHook().clearAll();
         if (serializer == null) {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
@@ -48,7 +49,6 @@ public class SocketRpcServer implements RpcServer {
             String host = InetAddress.getLocalHost().getHostAddress();
             serverSocket.bind(new InetSocketAddress(host, port));
             log.info("服务器启动……");
-            CustomShutdownHook.getCustomShutdownHook().clearAll();
             Socket socket;
             while ((socket = serverSocket.accept()) != null) {
                 log.info("消费者连接: {}:{}", socket.getInetAddress(), socket.getPort());
