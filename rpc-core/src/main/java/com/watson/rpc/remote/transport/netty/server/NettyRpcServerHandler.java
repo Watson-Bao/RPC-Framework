@@ -3,7 +3,7 @@ package com.watson.rpc.remote.transport.netty.server;
 import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.factory.SingletonFactory;
-import com.watson.rpc.handler.RpcRequestHandler;
+import com.watson.rpc.remote.handler.RpcRequestHandler;
 import com.watson.rpc.remote.constant.RpcConstants;
 import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcRequest;

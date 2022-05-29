@@ -1,7 +1,7 @@
 package com.watson.rpc.remote.transport.socket.server;
 
 import com.watson.rpc.factory.SingletonFactory;
-import com.watson.rpc.handler.RpcRequestHandler;
+import com.watson.rpc.remote.handler.RpcRequestHandler;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.socket.utils.ObjectReader;

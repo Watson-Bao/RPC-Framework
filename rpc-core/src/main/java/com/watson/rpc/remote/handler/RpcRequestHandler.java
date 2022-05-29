@@ -1,4 +1,4 @@
-package com.watson.rpc.handler;
+package com.watson.rpc.remote.handler;
 
 import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.factory.SingletonFactory;
