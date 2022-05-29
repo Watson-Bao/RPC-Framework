@@ -1,4 +1,4 @@
-package com.watson.rpc.remote.transport.utils;
+package com.watson.rpc.remote.transport.socket.utils;
 
 import com.watson.rpc.enume.PackageType;
 import com.watson.rpc.remote.dto.RpcRequest;
@@ -21,7 +21,7 @@ public class ObjectWriter {
         } else {
             outputStream.write(intToBytes(PackageType.RESPONSE_PACK.getCode()));
         }
-        outputStream.write(intToBytes(serializer.getCode()));
+        outputStream.write(serializer.getCode());
         byte[] bytes = serializer.serialize(object);
         outputStream.write(intToBytes(bytes.length));
         outputStream.write(bytes);

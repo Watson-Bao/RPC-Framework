@@ -1,15 +1,13 @@
 package com.watson.rpc.remote.transport.netty.server;
 
-import com.watson.rpc.codec.CommonDecoder;
-import com.watson.rpc.codec.CommonEncoder;
 import com.watson.rpc.config.CustomShutdownHook;
 import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.enume.RpcError;
-import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
 import com.watson.rpc.remote.transport.RpcServer;
+import com.watson.rpc.remote.transport.netty.codec.RpcMessageDecoder;
+import com.watson.rpc.remote.transport.netty.codec.RpcMessageEncoder;
 import com.watson.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -32,7 +30,6 @@ import java.net.UnknownHostException;
 public class NettyRpcServer implements RpcServer {
     private final int port;
     private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
-    private CommonSerializer serializer;
 
     public NettyRpcServer(int port) {
         this.port = port;
@@ -44,10 +41,6 @@ public class NettyRpcServer implements RpcServer {
     @Override
     public void start() {
         CustomShutdownHook.getCustomShutdownHook().clearAll();
-        if (serializer == null) {
-            log.error("未设置序列化器");
-            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
-        }
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -67,8 +60,8 @@ public class NettyRpcServer implements RpcServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new CommonEncoder(serializer));
-                            pipeline.addLast(new CommonDecoder());
+                            pipeline.addLast(new RpcMessageEncoder());
+                            pipeline.addLast(new RpcMessageDecoder());
                             pipeline.addLast(new NettyRpcServerHandler());
                         }
                     });
@@ -91,7 +84,6 @@ public class NettyRpcServer implements RpcServer {
 
     @Override
     public void setSerializer(CommonSerializer serializer) {
-        this.serializer = serializer;
     }
 
     /**
@@ -101,10 +93,6 @@ public class NettyRpcServer implements RpcServer {
      */
     @Override
     public void registerService(RpcServiceConfig rpcServiceConfig) {
-        if (serializer == null) {
-            log.error("未设置序列化器");
-            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
-        }
         serviceProvider.publishService(rpcServiceConfig, port);
     }
 }

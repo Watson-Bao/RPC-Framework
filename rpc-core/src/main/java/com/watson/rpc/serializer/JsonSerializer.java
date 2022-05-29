@@ -2,7 +2,7 @@ package com.watson.rpc.serializer;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;
-import com.watson.rpc.enume.SerializerCode;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.remote.dto.RpcRequest;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,13 +23,13 @@ public class JsonSerializer implements CommonSerializer {
     }
 
     @Override
-    public Object deserialize(byte[] bytes, Class<?> clazz) {
+    public <T> T deserialize(byte[] bytes, Class<T> clazz) {
         Object obj = JSON.parseObject(new String(bytes), clazz, JSONReader.Feature.SupportClassForName);
         if (obj instanceof RpcRequest) {
             obj = handleRequest(obj);
         }
         log.info("deserialized---" + obj.toString());
-        return obj;
+        return clazz.cast(obj);
     }
 
     /**
@@ -49,7 +49,7 @@ public class JsonSerializer implements CommonSerializer {
     }
 
     @Override
-    public int getCode() {
-        return SerializerCode.JSON.getCode();
+    public byte getCode() {
+        return SerializerEnum.JSON.getCode();
     }
 }

@@ -1,23 +1,24 @@
 package com.watson.rpc.remote.transport.netty.client;
 
-import com.watson.rpc.codec.CommonDecoder;
-import com.watson.rpc.codec.CommonEncoder;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.NacosServiceDiscovery;
+import com.watson.rpc.remote.constant.RpcConstants;
+import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.RpcClient;
+import com.watson.rpc.remote.transport.netty.codec.RpcMessageDecoder;
+import com.watson.rpc.remote.transport.netty.codec.RpcMessageEncoder;
 import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Hessian2Serializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +40,11 @@ public class NettyRpcClient implements RpcClient {
     private final ChannelProvider channelProvider;
     private CommonSerializer serializer;
 
-
     public NettyRpcClient() {
+        this(new Hessian2Serializer());
+    }
+
+    public NettyRpcClient(CommonSerializer serializer) {
         this.eventLoopGroup = new NioEventLoopGroup();
         this.bootstrap = new Bootstrap();
         this.bootstrap.group(this.eventLoopGroup)
@@ -57,17 +61,18 @@ public class NettyRpcClient implements RpcClient {
                         ChannelPipeline p = ch.pipeline();
                         /*自定义序列化编解码器*/
                         // RpcResponse -> ByteBuf
-                        p.addLast(new CommonEncoder(serializer));
+                        p.addLast(new RpcMessageEncoder());
                         // If no data is sent to the server within 15 seconds, a heartbeat request is sent
                         p.addLast(new IdleStateHandler(0, 5, 0, TimeUnit.SECONDS));
                         // ByteBuf -> RpcRequest
-                        p.addLast(new CommonDecoder());
+                        p.addLast(new RpcMessageDecoder());
                         p.addLast(new NettyRpcClientHandler());
                     }
                 });
         this.serviceDiscovery = new NacosServiceDiscovery();
         this.unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
         this.channelProvider = SingletonFactory.getInstance(ChannelProvider.class);
+        this.serializer = serializer;
     }
 
     /**
@@ -89,19 +94,23 @@ public class NettyRpcClient implements RpcClient {
         InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
         // get  server address related channel
         Channel channel = getChannel(inetSocketAddress);
-        if (channel.isActive()) {
+        if (channel != null && channel.isActive()) {
             // put unprocessed request
             unprocessedRequests.put(rpcRequest.getRequestId(), resultFuture);
-            channel.writeAndFlush(rpcRequest).addListener((ChannelFutureListener) future -> {
+            RpcMessage rpcMessage = new RpcMessage();
+            rpcMessage.setData(rpcRequest);
+            rpcMessage.setCodec(serializer.getCode());
+            rpcMessage.setMessageType(RpcConstants.REQUEST_TYPE);
+            channel.writeAndFlush(rpcMessage).addListener((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
-                    log.info("客户端发送消息: [{}]", rpcRequest);
+                    log.info("客户端发送消息: [{}]", rpcMessage);
                 } else {
                     future.channel().close();
                     resultFuture.completeExceptionally(future.cause());
                     log.error("发送消息时有错误发生: ", future.cause());
                 }
             });
-        }else {
+        } else {
             throw new IllegalStateException();
         }
 

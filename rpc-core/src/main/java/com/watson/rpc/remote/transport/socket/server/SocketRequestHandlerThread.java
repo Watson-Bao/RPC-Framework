@@ -4,8 +4,8 @@ import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.handler.RpcRequestHandler;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
-import com.watson.rpc.remote.transport.utils.ObjectReader;
-import com.watson.rpc.remote.transport.utils.ObjectWriter;
+import com.watson.rpc.remote.transport.socket.utils.ObjectReader;
+import com.watson.rpc.remote.transport.socket.utils.ObjectWriter;
 import com.watson.rpc.serializer.CommonSerializer;
 import lombok.extern.slf4j.Slf4j;
 

@@ -3,7 +3,7 @@ package com.watson.rpc.serializer;
 
 import com.alibaba.com.caucho.hessian.io.Hessian2Input;
 import com.alibaba.com.caucho.hessian.io.Hessian2Output;
-import com.watson.rpc.enume.SerializerCode;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.exception.SerializeException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,11 +41,13 @@ public class Hessian2Serializer implements CommonSerializer {
     }
 
     @Override
-    public Object deserialize(byte[] bytes, Class<?> clazz) {
+    public <T> T deserialize(byte[] bytes, Class<T> clazz) {
         Hessian2Input hessian2Input = null;
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes)) {
             hessian2Input = new Hessian2Input(byteArrayInputStream);
-            return hessian2Input.readObject();
+            Object obj = hessian2Input.readObject();
+            return clazz.cast(obj);
+
         } catch (IOException e) {
             log.error("序列化时有错误发生:", e);
             throw new SerializeException("序列化时有错误发生");
@@ -61,7 +63,7 @@ public class Hessian2Serializer implements CommonSerializer {
     }
 
     @Override
-    public int getCode() {
-        return SerializerCode.HESSIAN2.getCode();
+    public byte getCode() {
+        return SerializerEnum.HESSIAN2.getCode();
     }
 }

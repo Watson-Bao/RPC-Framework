@@ -1,6 +1,8 @@
 package com.watson.rpc.remote.transport.netty.client;
 
 import com.watson.rpc.factory.SingletonFactory;
+import com.watson.rpc.remote.constant.RpcConstants;
+import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -13,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author watson
  */
 @Slf4j
-public class NettyRpcClientHandler extends SimpleChannelInboundHandler<RpcResponse<Object>> {
+public class NettyRpcClientHandler extends SimpleChannelInboundHandler<Object> {
     private final UnprocessedRequests unprocessedRequests;
 
     public NettyRpcClientHandler() {
@@ -21,11 +23,23 @@ public class NettyRpcClientHandler extends SimpleChannelInboundHandler<RpcRespon
     }
 
 
+    /**
+     * Read the message transmitted by the server
+     */
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, RpcResponse<Object> msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
         try {
             log.info(String.format("客户端接收到消息: %s", msg));
-            unprocessedRequests.complete(msg);
+            if (msg instanceof RpcMessage) {
+                RpcMessage tmp = (RpcMessage) msg;
+                byte messageType = tmp.getMessageType();
+                if (messageType == RpcConstants.HEARTBEAT_RESPONSE_TYPE) {
+                    log.info("heart [{}]", tmp.getData());
+                } else if (messageType == RpcConstants.RESPONSE_TYPE) {
+                    RpcResponse<Object> rpcResponse = (RpcResponse<Object>) tmp.getData();
+                    unprocessedRequests.complete(rpcResponse);
+                }
+            }
         } finally {
             ReferenceCountUtil.release(msg);
         }

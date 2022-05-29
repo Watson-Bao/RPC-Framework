@@ -3,7 +3,7 @@ package com.watson.rpc.serializer;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.watson.rpc.enume.SerializerCode;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.exception.SerializeException;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
@@ -43,13 +43,13 @@ public class KryoSerializer implements CommonSerializer {
     }
 
     @Override
-    public Object deserialize(byte[] bytes, Class<?> clazz) {
+    public <T> T deserialize(byte[] bytes, Class<T> clazz) {
         try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
              Input input = new Input(byteArrayInputStream)) {
             Kryo kryo = kryoThreadLocal.get();
             Object o = kryo.readObject(input, clazz);
             kryoThreadLocal.remove();
-            return o;
+            return clazz.cast(o);
         } catch (Exception e) {
             log.error("反序列化时有错误发生:", e);
             throw new SerializeException("反序列化时有错误发生");
@@ -57,7 +57,7 @@ public class KryoSerializer implements CommonSerializer {
     }
 
     @Override
-    public int getCode() {
-        return SerializerCode.KRYO.getCode();
+    public byte getCode() {
+        return SerializerEnum.KRYO.getCode();
     }
 }

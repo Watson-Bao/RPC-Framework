@@ -1,4 +1,4 @@
-package com.watson.rpc.remote.transport.utils;
+package com.watson.rpc.remote.transport.socket.utils;
 
 import com.watson.rpc.enume.PackageType;
 import com.watson.rpc.enume.RpcError;
@@ -39,9 +39,9 @@ public class ObjectReader {
             log.error("不识别的数据包: {}", packageCode);
             throw new RpcException(RpcError.UNKNOWN_PACKAGE_TYPE);
         }
-        in.read(numberBytes);
-        int serializerCode = bytesToInt(numberBytes);
-        CommonSerializer serializer = CommonSerializer.getByCode(serializerCode);
+        byte[] serializerCode = new byte[1];
+        in.read(serializerCode);
+        CommonSerializer serializer = CommonSerializer.getByCode(serializerCode[0]);
         if (serializer == null) {
             log.error("不识别的反序列化器: {}", serializerCode);
             throw new RpcException(RpcError.UNKNOWN_SERIALIZER);

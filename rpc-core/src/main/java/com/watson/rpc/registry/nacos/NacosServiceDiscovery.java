@@ -28,7 +28,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
         try {
             List<Instance> instances = NacosUtil.getAllInstance(rpcRequest);
             Instance instance = instances.get(0);
-            log.info("成功找到服务地址:[{}:{}]", instance.getIp(),instance.getPort());
+            log.info("成功找到服务地址:[{}:{}]", instance.getIp(), instance.getPort());
             return new InetSocketAddress(instance.getIp(), instance.getPort());
         } catch (NacosException e) {
             log.error("获取服务时有错误发生:", e);

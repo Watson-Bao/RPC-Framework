@@ -1,16 +1,15 @@
 package com.watson.rpc.remote.transport.socket.client;
 
-import com.watson.rpc.enume.ResponseCode;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.NacosServiceDiscovery;
 import com.watson.rpc.remote.dto.RpcRequest;
-import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.RpcClient;
-import com.watson.rpc.remote.transport.utils.ObjectReader;
-import com.watson.rpc.remote.transport.utils.ObjectWriter;
+import com.watson.rpc.remote.transport.socket.utils.ObjectReader;
+import com.watson.rpc.remote.transport.socket.utils.ObjectWriter;
 import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Hessian2Serializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -31,7 +30,12 @@ public class SocketRpcClient implements RpcClient {
     private CommonSerializer serializer;
 
     public SocketRpcClient() {
+        this(new Hessian2Serializer());
+    }
+
+    public SocketRpcClient(CommonSerializer serializer) {
         this.serviceDiscovery = new NacosServiceDiscovery();
+        this.serializer = serializer;
     }
 
     @Override

@@ -1,29 +1,29 @@
 package com.watson.rpc.serializer;
 
+import com.watson.rpc.enume.SerializerEnum;
+
 /**
  * 通用的序列化反序列化接口
  *
  * @author watson
  */
 public interface CommonSerializer {
-    static CommonSerializer getByCode(int code) {
-        switch (code) {
-            case 0:
-                return new KryoSerializer();
-            case 1:
-                return new JsonSerializer();
-            case 2:
-                return new Hessian2Serializer();
-            case 3:
-                return new ProtobufSerializer();
-            default:
-                return null;
+    static CommonSerializer getByCode(byte code) {
+        if (code == SerializerEnum.KRYO.getCode()) {
+            return new KryoSerializer();
+        } else if (code == SerializerEnum.JSON.getCode()) {
+            return new JsonSerializer();
+        } else if (code == SerializerEnum.HESSIAN2.getCode()) {
+            return new Hessian2Serializer();
+        } else if (code == SerializerEnum.PROTOBUF.getCode()) {
+            return new ProtobufSerializer();
         }
+        return null;
     }
 
     byte[] serialize(Object obj);
 
-    Object deserialize(byte[] bytes, Class<?> clazz);
+    <T> T deserialize(byte[] bytes, Class<T> clazz);
 
-    int getCode();
+    byte getCode();
 }
