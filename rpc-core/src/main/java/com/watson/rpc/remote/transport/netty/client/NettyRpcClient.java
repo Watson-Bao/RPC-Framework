@@ -2,6 +2,7 @@ package com.watson.rpc.remote.transport.netty.client;
 
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.NacosServiceDiscovery;
 import com.watson.rpc.remote.dto.RpcRequest;
@@ -10,19 +11,17 @@ import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.serializer.CommonSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author watson
@@ -32,6 +31,8 @@ public class NettyRpcClient implements RpcClient {
     private final Bootstrap bootstrap;
     private final EventLoopGroup group;
     private final ServiceDiscovery serviceDiscovery;
+
+    private final UnprocessedRequests unprocessedRequests;
     private CommonSerializer serializer;
 
 
@@ -41,11 +42,10 @@ public class NettyRpcClient implements RpcClient {
         this.bootstrap.group(this.group)
                 .channel(NioSocketChannel.class)
                 .handler(new LoggingHandler(LogLevel.INFO))
-                //  The timeout period of the connection.
-                //  If this time is exceeded or the connection cannot be established, the connection fails.
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-                .option(ChannelOption.SO_KEEPALIVE, true);;
+                .option(ChannelOption.SO_KEEPALIVE, true);
+        ;
         this.serviceDiscovery = new NacosServiceDiscovery();
+        this.unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
     }
 
     /**
@@ -60,33 +60,39 @@ public class NettyRpcClient implements RpcClient {
             log.error("未设置序列化器");
             throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
         }
-        AtomicReference<Object> result = new AtomicReference<>(null);
+
+        // build return value
+        CompletableFuture<RpcResponse<Object>> resultFuture = new CompletableFuture<>();
+        // get server address
+        InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
+
 
         try {
-            InetSocketAddress inetSocketAddress = serviceDiscovery.lookupService(rpcRequest);
+            // get  server address related channel
             Channel channel = ChannelProvider.get(inetSocketAddress, serializer);
 
             if (!channel.isActive()) {
                 group.shutdownGracefully();
                 return null;
             }
-            channel.writeAndFlush(rpcRequest).addListener(future1 -> {
-                if (future1.isSuccess()) {
-                    log.info(String.format("客户端发送消息: %s", rpcRequest));
+
+            // put unprocessed request
+            unprocessedRequests.put(rpcRequest.getRequestId(), resultFuture);
+            channel.writeAndFlush(rpcRequest).addListener((ChannelFutureListener) future -> {
+                if (future.isSuccess()) {
+                    log.info("客户端发送消息: [{}]", rpcRequest);
                 } else {
-                    log.error("发送消息时有错误发生: ", future1.cause());
+                    future.channel().close();
+                    resultFuture.completeExceptionally(future.cause());
+                    log.error("发送消息时有错误发生: ", future.cause());
                 }
             });
-            channel.closeFuture().sync();
-            AttributeKey<RpcResponse<Object>> key = AttributeKey.valueOf("rpcResponse" + rpcRequest.getRequestId());
-            RpcResponse<Object> rpcResponse = channel.attr(key).get();
-            result.set(rpcResponse);
-
-
         } catch (InterruptedException e) {
-            log.error("发送消息时有错误发生: ", e);
+            unprocessedRequests.remove(rpcRequest.getRequestId());
+            log.error(e.getMessage(), e);
+            Thread.currentThread().interrupt();
         }
-        return result.get();
+        return resultFuture;
     }
 
     @Override

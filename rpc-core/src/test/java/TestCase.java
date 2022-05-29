@@ -5,8 +5,8 @@ import java.util.Date;
 
 public class TestCase {
     public static void main(String[] args) {
-        Class<?>[] arrays= new Class[] { int.class, Date.class, String.class};
-        Wrapper wrapper=new Wrapper();
+        Class<?>[] arrays = new Class[]{int.class, Date.class, String.class};
+        Wrapper wrapper = new Wrapper();
         wrapper.setParameterTypes(arrays);
         String s = JSON.toJSONString(wrapper);
         System.out.println(s);

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 当服务端（provider）关闭的时候做一些事情比如取消注册所有服务
+ *
  * @author watson
  */
 @Slf4j

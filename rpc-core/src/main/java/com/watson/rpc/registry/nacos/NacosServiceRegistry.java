@@ -1,7 +1,6 @@
 package com.watson.rpc.registry.nacos;
 
 import com.alibaba.nacos.api.exception.NacosException;
-import com.alibaba.nacos.api.naming.NamingService;
 import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;

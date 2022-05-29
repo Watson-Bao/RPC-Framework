@@ -6,9 +6,7 @@ import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.proxy.RpcClientProxy;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
-import com.watson.rpc.serializer.Hessian2Serializer;
 import com.watson.rpc.serializer.JsonSerializer;
-import com.watson.rpc.serializer.KryoSerializer;
 
 
 /**

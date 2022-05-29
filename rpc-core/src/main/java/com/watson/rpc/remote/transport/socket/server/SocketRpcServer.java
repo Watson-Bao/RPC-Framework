@@ -35,7 +35,7 @@ public class SocketRpcServer implements RpcServer {
 
     public SocketRpcServer(int port) {
         this.port = port;
-        threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-rpc-server");
+        threadPool = ThreadPoolFactoryUtil.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
     }
 
     @Override

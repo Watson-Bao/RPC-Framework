@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -25,12 +24,12 @@ import java.util.Set;
 public class NacosUtil {
     private static final NamingService namingService;
     private static final Set<RpcServiceConfig> rpcServices = new HashSet<>();
+    private static final String SERVER_ADDR = "wslhost:8848";
     private static InetSocketAddress address;
 
     static {
         namingService = getNacosNamingService();
     }
-    private static final String SERVER_ADDR = "wslhost:8848";
 
     private static NamingService getNacosNamingService() {
         try {
@@ -53,12 +52,12 @@ public class NacosUtil {
     }
 
     public static void clearRegistry() {
-        if(!rpcServices.isEmpty() && address != null) {
+        if (!rpcServices.isEmpty() && address != null) {
             String host = address.getHostName();
             int port = address.getPort();
             for (RpcServiceConfig rpcService : rpcServices) {
                 try {
-                    namingService.deregisterInstance(rpcService.getRpcServiceName(),rpcService.getGroup(), host, port);
+                    namingService.deregisterInstance(rpcService.getRpcServiceName(), rpcService.getGroup(), host, port);
                 } catch (NacosException e) {
                     log.error("注销服务 {} 失败", rpcService.getRpcServiceName(), e);
                 }

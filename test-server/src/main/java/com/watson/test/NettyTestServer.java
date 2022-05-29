@@ -7,7 +7,6 @@ import com.watson.rpc.remote.transport.netty.server.NettyRpcServer;
 import com.watson.rpc.serializer.Hessian2Serializer;
 
 
-
 /**
  * 测试用Netty服务提供者（服务端）
  *

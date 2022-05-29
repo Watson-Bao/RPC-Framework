@@ -5,8 +5,6 @@ import com.watson.rpc.handler.RpcRequestHandler;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtil;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.ReferenceCountUtil;
@@ -42,9 +40,15 @@ public class NettyRpcServerHandler extends SimpleChannelInboundHandler<RpcReques
         threadPool.execute(() -> {
             try {
                 log.info("服务器接收到请求: {}", msg);
+                //执行目标方法（客户端需要执行的方法）并且返回方法结果
                 RpcResponse<Object> response = rpcRequestHandler.handle(msg);
-                ChannelFuture future = ctx.writeAndFlush(response);
-                future.addListener(ChannelFutureListener.CLOSE);
+                log.info("服务器处理得到请求结果: {}", response.toString());
+                if (ctx.channel().isActive() && ctx.channel().isWritable()) {
+                    //返回方法执行结果给客户端
+                    ctx.writeAndFlush(response);
+                } else {
+                    log.error("not writable now, message dropped");
+                }
             } finally {
                 ReferenceCountUtil.release(msg);
             }
