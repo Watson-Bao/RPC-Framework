@@ -24,38 +24,30 @@ import java.util.concurrent.ExecutorService;
  */
 @Slf4j
 public class NettyRpcServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
-    private static final String THREAD_NAME_PREFIX = "netty-server-handler";
 
-
-    private RpcRequestHandler rpcRequestHandler;
-    private final ExecutorService threadPool;
+    private final RpcRequestHandler rpcRequestHandler;
 
     public NettyRpcServerHandler() {
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
-        CustomThreadPoolConfig customThreadPoolConfig = new CustomThreadPoolConfig();
-        customThreadPoolConfig.setCorePoolSize(6);
-        this.threadPool = ThreadPoolFactoryUtils.createCustomThreadPoolIfAbsent(THREAD_NAME_PREFIX, customThreadPoolConfig);
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcRequest msg) throws Exception {
-        threadPool.execute(() -> {
-            try {
-                log.info("服务器接收到请求: {}", msg);
-                //执行目标方法（客户端需要执行的方法）并且返回方法结果
-                RpcResponse<Object> response = rpcRequestHandler.handle(msg);
-                log.info("服务器处理得到请求结果: {}", response.toString());
-                if (ctx.channel().isActive() && ctx.channel().isWritable()) {
-                    //返回方法执行结果给客户端
-                    ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
-                } else {
-                    log.error("not writable now, message dropped");
-                }
-            } finally {
-                //确保 ByteBuf 被释放，不然可能会有内存泄露问题
-                ReferenceCountUtil.release(msg);
+        try {
+            log.info("服务器接收到请求: {}", msg);
+            //执行目标方法（客户端需要执行的方法）并且返回方法结果
+            RpcResponse<Object> response = rpcRequestHandler.handle(msg);
+            log.info("服务器处理得到请求结果: {}", response.toString());
+            if (ctx.channel().isActive() && ctx.channel().isWritable()) {
+                //返回方法执行结果给客户端
+                ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
+            } else {
+                log.error("not writable now, message dropped");
             }
-        });
+        } finally {
+            //确保 ByteBuf 被释放，不然可能会有内存泄露问题
+            ReferenceCountUtil.release(msg);
+        }
     }
 
     @Override
