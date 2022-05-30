@@ -11,7 +11,7 @@ import com.watson.rpc.remote.transport.netty.server.NettyRpcServer;
  *
  * @author watson
  */
-public class NettyTestServer {
+public class NettyTestServerMain {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl();
         RpcServer nettyRpcServer = new NettyRpcServer(9999);

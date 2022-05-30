@@ -4,6 +4,9 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.loadblance.LoadBalance;
+import com.watson.rpc.loadblance.RandomLoadBalance;
+import com.watson.rpc.loadblance.RoundRobinLoadBalance;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.utils.NacosUtil;
 import com.watson.rpc.remote.dto.RpcRequest;
@@ -17,7 +20,11 @@ import java.util.List;
  */
 @Slf4j
 public class NacosServiceDiscovery implements ServiceDiscovery {
+    private final LoadBalance loadBalance;
 
+    public NacosServiceDiscovery() {
+        this.loadBalance = new RoundRobinLoadBalance();
+    }
 
     /**
      * 根据服务名称查找服务实体连接地址
@@ -30,7 +37,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
         try {
             List<Instance> instances = NacosUtil.getAllInstance(rpcRequest);
             if (instances != null && instances.size() > 0) {
-                Instance instance = instances.get(0);
+                Instance instance = loadBalance.selectServiceAddress(instances);
                 log.info("成功找到服务地址:[{}:{}]", instance.getIp(), instance.getPort());
                 return new InetSocketAddress(instance.getIp(), instance.getPort());
             } else {

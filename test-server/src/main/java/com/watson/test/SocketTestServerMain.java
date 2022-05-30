@@ -9,7 +9,7 @@ import com.watson.rpc.serializer.JsonSerializer;
 /**
  * @author watson
  */
-public class SocketTestServer {
+public class SocketTestServerMain {
     public static void main(String[] args) {
         HelloService helloService = new HelloServiceImpl2();
         RpcServer socketRpcServer = new SocketRpcServer(9000, new JsonSerializer());
