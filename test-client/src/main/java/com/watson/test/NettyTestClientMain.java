@@ -3,6 +3,7 @@ package com.watson.test;
 import com.watson.rpc.api.HelloObject;
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.config.RpcServiceConfig;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.proxy.RpcClientProxy;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
@@ -15,7 +16,7 @@ import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
  */
 public class NettyTestClientMain {
     public static void main(String[] args) {
-        RpcClient client = new NettyRpcClient();
+        RpcClient client = new NettyRpcClient(SerializerEnum.KRYO.getCode());
         RpcServiceConfig rpcServiceConfig = RpcServiceConfig.builder().group("netty").version("version1").build();
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client, rpcServiceConfig);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);

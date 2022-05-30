@@ -22,7 +22,7 @@ public interface RpcClient {
     /**
      * 设置序列化器
      *
-     * @param serializer
+     * @param serializerCode
      */
-    void setSerializer(Serializer serializer);
+    void setSerializer(byte serializerCode);
 }

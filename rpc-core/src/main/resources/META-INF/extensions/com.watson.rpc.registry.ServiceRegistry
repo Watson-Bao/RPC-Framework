@@ -1,0 +1,1 @@
+nacos=com.watson.rpc.registry.nacos.NacosServiceRegistry

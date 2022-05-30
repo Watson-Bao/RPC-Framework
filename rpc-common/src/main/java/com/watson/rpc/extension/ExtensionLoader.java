@@ -15,8 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * @see <a href=https://dubbo.apache.org/zh/docs/references/spis/dubbo-spi/>refer to dubbo spi</a>
  * @author watson
+ * @see <a href=https://dubbo.apache.org/zh/docs/references/spis/dubbo-spi/>refer to dubbo spi</a>
  */
 @Slf4j
 public class ExtensionLoader<T> {
@@ -118,7 +118,7 @@ public class ExtensionLoader<T> {
     private void loadDirectory(Map<String, Class<?>> extensionClasses) {
         String fileName = ExtensionLoader.SERVICE_DIRECTORY + type.getName();
         try {
-            Enumeration<URL> urls =null;
+            Enumeration<URL> urls = null;
             ClassLoader classLoader = ExtensionLoader.class.getClassLoader();
             urls = classLoader.getResources(fileName);
             if (urls != null) {

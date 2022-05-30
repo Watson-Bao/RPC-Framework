@@ -1,7 +1,9 @@
 package com.watson.rpc.remote.transport.netty.codec;
 
 import com.watson.rpc.enume.RpcError;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.extension.ExtensionLoader;
 import com.watson.rpc.remote.constant.RpcConstants;
 import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcRequest;
@@ -108,7 +110,8 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
             if (bodyLength > 0) {
                 byte[] messageBody = new byte[bodyLength];
                 in.readBytes(messageBody);
-                Serializer serializer = Serializer.getByCode(rpcMessage.getCodec());
+                String codecName = SerializerEnum.getName(rpcMessage.getCodec());
+                Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
                 if (messageType == RpcConstants.REQUEST_TYPE) {
                     RpcRequest tmpValue = serializer.deserialize(messageBody, RpcRequest.class);
                     rpcMessage.setData(tmpValue);

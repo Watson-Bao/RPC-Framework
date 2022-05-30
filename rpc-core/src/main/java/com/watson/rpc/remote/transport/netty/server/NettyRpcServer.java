@@ -2,14 +2,15 @@ package com.watson.rpc.remote.transport.netty.server;
 
 import com.watson.rpc.config.CustomShutdownHook;
 import com.watson.rpc.config.RpcServiceConfig;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
 import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageDecoder;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageEncoder;
-import com.watson.rpc.serializer.Serializer;
 import com.watson.rpc.serializer.Hessian2Serializer;
+import com.watson.rpc.serializer.Serializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -33,15 +34,15 @@ import java.util.concurrent.TimeUnit;
 public class NettyRpcServer implements RpcServer {
     private final int port;
     private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
-    private Serializer serializer;
+    private byte serializerCode;
 
     public NettyRpcServer(int port) {
-        this(port, new Hessian2Serializer());
+        this(port, SerializerEnum.HESSIAN2.getCode());
     }
 
-    public NettyRpcServer(int port, Serializer serializer) {
+    public NettyRpcServer(int port, byte serializerCode) {
         this.port = port;
-        this.serializer = serializer;
+        this.serializerCode = serializerCode;
     }
 
     /**
@@ -73,7 +74,7 @@ public class NettyRpcServer implements RpcServer {
                             pipeline.addLast(new IdleStateHandler(0, 0, 30, TimeUnit.SECONDS));
                             pipeline.addLast(new RpcMessageEncoder());
                             pipeline.addLast(new RpcMessageDecoder());
-                            pipeline.addLast(new NettyRpcServerHandler(serializer));
+                            pipeline.addLast(new NettyRpcServerHandler(serializerCode));
                         }
                     });
             String host = InetAddress.getLocalHost().getHostAddress();
@@ -94,8 +95,8 @@ public class NettyRpcServer implements RpcServer {
     }
 
     @Override
-    public void setSerializer(Serializer serializer) {
-        this.serializer = serializer;
+    public void setSerializer(byte serializerCode) {
+        this.serializerCode = serializerCode;
     }
 
     /**

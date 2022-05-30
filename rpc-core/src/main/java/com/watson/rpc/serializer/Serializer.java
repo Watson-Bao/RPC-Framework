@@ -1,6 +1,5 @@
 package com.watson.rpc.serializer;
 
-import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.extension.SPI;
 
 /**
@@ -10,22 +9,30 @@ import com.watson.rpc.extension.SPI;
  */
 @SPI
 public interface Serializer {
-    static Serializer getByCode(byte code) {
-        if (code == SerializerEnum.KRYO.getCode()) {
-            return new KryoSerializer();
-        } else if (code == SerializerEnum.JSON.getCode()) {
-            return new JsonSerializer();
-        } else if (code == SerializerEnum.HESSIAN2.getCode()) {
-            return new Hessian2Serializer();
-        } else if (code == SerializerEnum.PROTOBUF.getCode()) {
-            return new ProtobufSerializer();
-        }
-        return null;
-    }
 
+    /**
+     * 序列化
+     *
+     * @param obj
+     * @return
+     */
     byte[] serialize(Object obj);
 
+
+    /**
+     * 反序列化
+     *
+     * @param bytes
+     * @param clazz
+     * @param <T>
+     * @return
+     */
     <T> T deserialize(byte[] bytes, Class<T> clazz);
 
+    /**
+     * 获取序列化器对应码
+     *
+     * @return
+     */
     byte getCode();
 }

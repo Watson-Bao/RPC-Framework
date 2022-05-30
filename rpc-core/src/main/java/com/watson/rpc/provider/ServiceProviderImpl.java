@@ -3,8 +3,8 @@ package com.watson.rpc.provider;
 import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.extension.ExtensionLoader;
 import com.watson.rpc.registry.ServiceRegistry;
-import com.watson.rpc.registry.nacos.NacosServiceRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
@@ -33,7 +33,7 @@ public class ServiceProviderImpl implements ServiceProvider {
     public ServiceProviderImpl() {
         serviceMap = new ConcurrentHashMap<>();
         registeredService = ConcurrentHashMap.newKeySet();
-        serviceRegistry = new NacosServiceRegistry();
+        serviceRegistry = ExtensionLoader.getExtensionLoader(ServiceRegistry.class).getExtension("nacos");
     }
 
     @Override

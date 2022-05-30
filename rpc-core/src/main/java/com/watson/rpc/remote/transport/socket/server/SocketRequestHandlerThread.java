@@ -23,12 +23,12 @@ import java.net.Socket;
 public class SocketRequestHandlerThread implements Runnable {
     private final Socket socket;
     private final RpcRequestHandler rpcRequestHandler;
-    private final Serializer serializer;
+    private final byte serializerCode;
 
-    public SocketRequestHandlerThread(Socket socket, Serializer serializer) {
+    public SocketRequestHandlerThread(Socket socket, byte serializerCode) {
         this.socket = socket;
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
-        this.serializer = serializer;
+        this.serializerCode = serializerCode;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SocketRequestHandlerThread implements Runnable {
              OutputStream outputStream = socket.getOutputStream()) {
             RpcRequest rpcRequest = (RpcRequest) ObjectReader.readObject(inputStream);
             RpcResponse<Object> response = rpcRequestHandler.handle(rpcRequest);
-            ObjectWriter.writeObject(outputStream, response, serializer);
+            ObjectWriter.writeObject(outputStream, response, serializerCode);
         } catch (IOException e) {
             log.error("调用或发送时有错误发生：", e);
         }

@@ -1,5 +1,7 @@
 package com.watson.rpc.remote.transport.netty.codec;
 
+import com.watson.rpc.enume.SerializerEnum;
+import com.watson.rpc.extension.ExtensionLoader;
 import com.watson.rpc.remote.constant.RpcConstants;
 import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.serializer.Serializer;
@@ -57,7 +59,8 @@ public class RpcMessageEncoder extends MessageToByteEncoder<RpcMessage> {
             if (messageType != RpcConstants.HEARTBEAT_REQUEST_TYPE
                     && messageType != RpcConstants.HEARTBEAT_RESPONSE_TYPE) {
                 //对象序列化
-                Serializer serializer = Serializer.getByCode(rpcMessage.getCodec());
+                String codecName = SerializerEnum.getName(rpcMessage.getCodec());
+                Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
                 bodyBytes = serializer.serialize(rpcMessage.getData());
                 fullLength += bodyBytes.length;
             }

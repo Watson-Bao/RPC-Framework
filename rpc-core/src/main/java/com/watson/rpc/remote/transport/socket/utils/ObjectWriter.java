@@ -1,8 +1,11 @@
 package com.watson.rpc.remote.transport.socket.utils;
 
 import com.watson.rpc.enume.PackageType;
+import com.watson.rpc.enume.SerializerEnum;
+import com.watson.rpc.extension.ExtensionLoader;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.serializer.Serializer;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -10,10 +13,11 @@ import java.io.OutputStream;
 /**
  * @author watson
  */
+@Slf4j
 public class ObjectWriter {
     private static final int MAGIC_NUMBER = 0xCAFEBABE;
 
-    public static void writeObject(OutputStream outputStream, Object object, Serializer serializer) throws IOException {
+    public static void writeObject(OutputStream outputStream, Object object, byte serializerCode) throws IOException {
 
         outputStream.write(intToBytes(MAGIC_NUMBER));
         if (object instanceof RpcRequest) {
@@ -21,7 +25,9 @@ public class ObjectWriter {
         } else {
             outputStream.write(intToBytes(PackageType.RESPONSE_PACK.getCode()));
         }
-        outputStream.write(serializer.getCode());
+        outputStream.write(serializerCode);
+        String codecName = SerializerEnum.getName(serializerCode);
+        Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
         byte[] bytes = serializer.serialize(object);
         outputStream.write(intToBytes(bytes.length));
         outputStream.write(bytes);

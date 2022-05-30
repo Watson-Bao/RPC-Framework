@@ -1,0 +1,4 @@
+HESSIAN2=com.watson.rpc.serializer.Hessian2Serializer
+JSON=com.watson.rpc.serializer.JsonSerializer
+KRYO=com.watson.rpc.serializer.KryoSerializer
+PROTOBUF=com.watson.rpc.serializer.ProtobufSerializer

@@ -17,9 +17,9 @@ public interface RpcServer {
     /**
      * 设置序列化器
      *
-     * @param serializer
+     * @param serializerCode
      */
-    void setSerializer(Serializer serializer);
+    void setSerializer(byte serializerCode);
 
     /**
      * 服务器端发布服务

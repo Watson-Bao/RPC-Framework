@@ -28,11 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 public class NettyRpcServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private final RpcRequestHandler rpcRequestHandler;
-    private final Serializer serializer;
+    private final byte serializerCode;
 
-    public NettyRpcServerHandler(Serializer serializer) {
+    public NettyRpcServerHandler(byte serializerCode) {
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
-        this.serializer = serializer;
+        this.serializerCode = serializerCode;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class NettyRpcServerHandler extends SimpleChannelInboundHandler<Object> {
                 log.info("服务器接收到请求: {}", msg);
                 byte messageType = ((RpcMessage) msg).getMessageType();
                 RpcMessage rpcMessage = new RpcMessage();
-                rpcMessage.setCodec(serializer.getCode());
+                rpcMessage.setCodec(serializerCode);
                 if (messageType == RpcConstants.HEARTBEAT_REQUEST_TYPE) {
                     rpcMessage.setMessageType(RpcConstants.HEARTBEAT_RESPONSE_TYPE);
                     rpcMessage.setData(RpcConstants.PONG);

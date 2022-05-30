@@ -2,6 +2,7 @@ package com.watson.rpc.utils;
 
 /**
  * String 工具类
+ *
  * @author watson
  */
 public class StringUtil {

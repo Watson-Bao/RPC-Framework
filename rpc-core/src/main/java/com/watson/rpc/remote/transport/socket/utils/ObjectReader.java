@@ -2,7 +2,9 @@ package com.watson.rpc.remote.transport.socket.utils;
 
 import com.watson.rpc.enume.PackageType;
 import com.watson.rpc.enume.RpcError;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.extension.ExtensionLoader;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.serializer.Serializer;
@@ -41,7 +43,8 @@ public class ObjectReader {
         }
         byte[] serializerCode = new byte[1];
         in.read(serializerCode);
-        Serializer serializer = Serializer.getByCode(serializerCode[0]);
+        String codecName = SerializerEnum.getName(serializerCode[0]);
+        Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
         if (serializer == null) {
             log.error("不识别的反序列化器: {}", serializerCode);
             throw new RpcException(RpcError.UNKNOWN_SERIALIZER);

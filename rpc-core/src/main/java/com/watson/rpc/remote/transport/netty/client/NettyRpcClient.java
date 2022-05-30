@@ -1,10 +1,11 @@
 package com.watson.rpc.remote.transport.netty.client;
 
 import com.watson.rpc.enume.RpcError;
+import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.exception.RpcException;
+import com.watson.rpc.extension.ExtensionLoader;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.registry.ServiceDiscovery;
-import com.watson.rpc.registry.nacos.NacosServiceDiscovery;
 import com.watson.rpc.remote.constant.RpcConstants;
 import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcRequest;
@@ -12,8 +13,8 @@ import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageDecoder;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageEncoder;
-import com.watson.rpc.serializer.Serializer;
 import com.watson.rpc.serializer.Hessian2Serializer;
+import com.watson.rpc.serializer.Serializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -38,13 +39,13 @@ public class NettyRpcClient implements RpcClient {
 
     private final UnprocessedRequests unprocessedRequests;
     private final ChannelProvider channelProvider;
-    private Serializer serializer;
+    private byte serializerCode;
 
     public NettyRpcClient() {
-        this(new Hessian2Serializer());
+        this(SerializerEnum.HESSIAN2.getCode());
     }
 
-    public NettyRpcClient(Serializer serializer) {
+    public NettyRpcClient(byte serializerCode) {
         this.eventLoopGroup = new NioEventLoopGroup();
         this.bootstrap = new Bootstrap();
         this.bootstrap.group(this.eventLoopGroup)
@@ -69,10 +70,10 @@ public class NettyRpcClient implements RpcClient {
                         p.addLast(new NettyRpcClientHandler());
                     }
                 });
-        this.serviceDiscovery = new NacosServiceDiscovery();
+        this.serviceDiscovery = ExtensionLoader.getExtensionLoader(ServiceDiscovery.class).getExtension("nacos");
         this.unprocessedRequests = SingletonFactory.getInstance(UnprocessedRequests.class);
         this.channelProvider = SingletonFactory.getInstance(ChannelProvider.class);
-        this.serializer = serializer;
+        this.serializerCode = serializerCode;
     }
 
     /**
@@ -83,10 +84,6 @@ public class NettyRpcClient implements RpcClient {
      */
     @Override
     public Object sendRpcRequest(RpcRequest rpcRequest) {
-        if (serializer == null) {
-            log.error("未设置序列化器");
-            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND);
-        }
 
         // build return value
         CompletableFuture<RpcResponse<Object>> resultFuture = new CompletableFuture<>();
@@ -103,7 +100,7 @@ public class NettyRpcClient implements RpcClient {
             unprocessedRequests.put(rpcRequest.getRequestId(), resultFuture);
             RpcMessage rpcMessage = new RpcMessage();
             rpcMessage.setData(rpcRequest);
-            rpcMessage.setCodec(serializer.getCode());
+            rpcMessage.setCodec(serializerCode);
             rpcMessage.setMessageType(RpcConstants.REQUEST_TYPE);
             channel.writeAndFlush(rpcMessage).addListener((ChannelFutureListener) future -> {
                 if (future.isSuccess()) {
@@ -151,7 +148,7 @@ public class NettyRpcClient implements RpcClient {
     }
 
     @Override
-    public void setSerializer(Serializer serializer) {
-        this.serializer = serializer;
+    public void setSerializer(byte serializerCode) {
+        this.serializerCode = serializerCode;
     }
 }
