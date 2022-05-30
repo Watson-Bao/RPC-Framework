@@ -23,7 +23,7 @@ import java.util.Set;
 @Slf4j
 public class NacosUtil {
     private static final NamingService namingService;
-    private static final Set<RpcServiceConfig> rpcServices = new HashSet<>();
+    private static final Set<RpcServiceConfig> RPC_SERVICE_CONFIGS = new HashSet<>();
     private static final String SERVER_ADDR = "wslhost:8848";
     private static InetSocketAddress address;
 
@@ -44,7 +44,7 @@ public class NacosUtil {
 
         namingService.registerInstance(rpcServiceConfig.getRpcServiceName(), rpcServiceConfig.getGroup(), address.getHostName(), address.getPort());
         NacosUtil.address = address;
-        rpcServices.add(rpcServiceConfig);
+        RPC_SERVICE_CONFIGS.add(rpcServiceConfig);
     }
 
     public static List<Instance> getAllInstance(RpcRequest rpcRequest) throws NacosException {
@@ -53,10 +53,10 @@ public class NacosUtil {
     }
 
     public static void clearRegistry() {
-        if (!rpcServices.isEmpty() && address != null) {
+        if (!RPC_SERVICE_CONFIGS.isEmpty() && address != null) {
             String host = address.getHostName();
             int port = address.getPort();
-            for (RpcServiceConfig rpcService : rpcServices) {
+            for (RpcServiceConfig rpcService : RPC_SERVICE_CONFIGS) {
                 try {
                     namingService.deregisterInstance(rpcService.getRpcServiceName(), rpcService.getGroup(), host, port);
                 } catch (NacosException e) {

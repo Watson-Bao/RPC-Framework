@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 负载均衡接口
+ *
  * @author watson
  */
 public interface LoadBalance {

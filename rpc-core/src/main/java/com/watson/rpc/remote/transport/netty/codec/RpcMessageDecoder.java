@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  * {@link LengthFieldBasedFrameDecoder} is a length-based decoder , used to solve TCP unpacking and sticking problems.
  * </p>
+ *
  * @author watson
  * @see <a href="https://zhuanlan.zhihu.com/p/95621344">LengthFieldBasedFrameDecoder解码器</a>
  */

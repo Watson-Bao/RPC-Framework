@@ -5,7 +5,6 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.loadblance.LoadBalance;
-import com.watson.rpc.loadblance.RandomLoadBalance;
 import com.watson.rpc.loadblance.RoundRobinLoadBalance;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.utils.NacosUtil;
