@@ -2,7 +2,6 @@ package com.watson.rpc.remote.transport;
 
 import com.watson.rpc.extension.SPI;
 import com.watson.rpc.remote.dto.RpcRequest;
-import com.watson.rpc.serializer.Serializer;
 
 /**
  * 客户端类通用接口

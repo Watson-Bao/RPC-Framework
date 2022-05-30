@@ -2,15 +2,11 @@ package com.watson.rpc.remote.transport.socket.server;
 
 import com.watson.rpc.config.CustomShutdownHook;
 import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.enume.SerializerEnum;
-import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
 import com.watson.rpc.remote.transport.RpcServer;
-import com.watson.rpc.serializer.Hessian2Serializer;
-import com.watson.rpc.serializer.Serializer;
 import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtils;
 import lombok.extern.slf4j.Slf4j;
 

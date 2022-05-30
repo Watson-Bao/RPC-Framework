@@ -1,6 +1,5 @@
 package com.watson.rpc.remote.transport.socket.client;
 
-import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.extension.ExtensionLoader;
@@ -9,8 +8,6 @@ import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.socket.utils.ObjectReader;
 import com.watson.rpc.remote.transport.socket.utils.ObjectWriter;
-import com.watson.rpc.serializer.Hessian2Serializer;
-import com.watson.rpc.serializer.Serializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

@@ -5,7 +5,6 @@ import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.enume.SerializerEnum;
 import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.remote.transport.socket.server.SocketRpcServer;
-import com.watson.rpc.serializer.JsonSerializer;
 
 /**
  * @author watson

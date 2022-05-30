@@ -1,8 +1,6 @@
 package com.watson.rpc.remote.transport.netty.client;
 
-import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.enume.SerializerEnum;
-import com.watson.rpc.exception.RpcException;
 import com.watson.rpc.extension.ExtensionLoader;
 import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.registry.ServiceDiscovery;
@@ -13,8 +11,6 @@ import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageDecoder;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageEncoder;
-import com.watson.rpc.serializer.Hessian2Serializer;
-import com.watson.rpc.serializer.Serializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;

@@ -1,7 +1,6 @@
 package com.watson.rpc.remote.transport;
 
 import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.serializer.Serializer;
 
 /**
  * 服务器类通用接口

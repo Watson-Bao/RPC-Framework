@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * 进行过程调用的处理器
+ * 服务器对收到的请求进行处理并返回结果
  *
  * @author watson
  */

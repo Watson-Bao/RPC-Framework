@@ -75,21 +75,9 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
     }
 
 
-    private Object decodeFrame(ByteBuf in) throws Exception {
-        //读取前4个magic比对一下
-        int len = RpcConstants.MAGIC_NUMBER.length;
-        byte[] tmp = new byte[len];
-        in.readBytes(tmp);
-        for (int i = 0; i < len; i++) {
-            if (tmp[i] != RpcConstants.MAGIC_NUMBER[i]) {
-                log.error("不识别的协议包");
-                throw new RpcException(RpcError.UNKNOWN_PROTOCOL);
-            }
-        }
-        byte version = in.readByte();
-        if (version != RpcConstants.VERSION) {
-            throw new RuntimeException("数据包版本不兼容" + version);
-        }
+    private Object decodeFrame(ByteBuf in) {
+        checkMagicNumber(in);
+        checkVersion(in);
         //数据帧总长度
         int fullLength = in.readInt();
         //消息类型
@@ -101,27 +89,54 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
         rpcMessage.setMessageType(messageType);
         rpcMessage.setRequestId(requestId);
         rpcMessage.setCodec(codecType);
+
         if (messageType == RpcConstants.HEARTBEAT_REQUEST_TYPE) {
             rpcMessage.setData(RpcConstants.PING);
-        } else if (messageType == RpcConstants.HEARTBEAT_RESPONSE_TYPE) {
+            return rpcMessage;
+        }
+
+        if (messageType == RpcConstants.HEARTBEAT_RESPONSE_TYPE) {
             rpcMessage.setData(RpcConstants.PONG);
-        } else {
-            int bodyLength = fullLength - RpcConstants.HEAD_LENGTH;
-            if (bodyLength > 0) {
-                byte[] messageBody = new byte[bodyLength];
-                in.readBytes(messageBody);
-                String codecName = SerializerEnum.getName(rpcMessage.getCodec());
-                Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
-                if (messageType == RpcConstants.REQUEST_TYPE) {
-                    RpcRequest tmpValue = serializer.deserialize(messageBody, RpcRequest.class);
-                    rpcMessage.setData(tmpValue);
-                } else {
-                    RpcResponse tmpValue = serializer.deserialize(messageBody, RpcResponse.class);
-                    rpcMessage.setData(tmpValue);
-                }
+            return rpcMessage;
+        }
+
+        int bodyLength = fullLength - RpcConstants.HEAD_LENGTH;
+        if (bodyLength > 0) {
+            byte[] messageBody = new byte[bodyLength];
+            in.readBytes(messageBody);
+
+            String codecName = SerializerEnum.getName(rpcMessage.getCodec());
+            Serializer serializer = ExtensionLoader.getExtensionLoader(Serializer.class).getExtension(codecName);
+
+            if (messageType == RpcConstants.REQUEST_TYPE) {
+                RpcRequest tmpValue = serializer.deserialize(messageBody, RpcRequest.class);
+                rpcMessage.setData(tmpValue);
+            } else {
+                RpcResponse tmpValue = serializer.deserialize(messageBody, RpcResponse.class);
+                rpcMessage.setData(tmpValue);
             }
         }
-        return rpcMessage;
 
+        return rpcMessage;
+    }
+
+    private void checkVersion(ByteBuf in) {
+        byte version = in.readByte();
+        if (version != RpcConstants.VERSION) {
+            throw new RuntimeException("数据包版本不兼容" + version);
+        }
+    }
+
+    private void checkMagicNumber(ByteBuf in) {
+        //读取前4个magic比对一下
+        int len = RpcConstants.MAGIC_NUMBER.length;
+        byte[] tmp = new byte[len];
+        in.readBytes(tmp);
+        for (int i = 0; i < len; i++) {
+            if (tmp[i] != RpcConstants.MAGIC_NUMBER[i]) {
+                log.error("不识别的协议包");
+                throw new RpcException(RpcError.UNKNOWN_PROTOCOL);
+            }
+        }
     }
 }

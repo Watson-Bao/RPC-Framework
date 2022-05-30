@@ -6,7 +6,6 @@ import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.handler.RpcRequestHandler;
 import com.watson.rpc.remote.transport.socket.utils.ObjectReader;
 import com.watson.rpc.remote.transport.socket.utils.ObjectWriter;
-import com.watson.rpc.serializer.Serializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
