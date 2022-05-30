@@ -6,6 +6,7 @@ import com.watson.rpc.config.RpcServiceConfig;
 import com.watson.rpc.proxy.RpcClientProxy;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
