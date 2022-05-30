@@ -1,14 +1,16 @@
 package com.watson.rpc.serializer;
 
 import com.watson.rpc.enume.SerializerEnum;
+import com.watson.rpc.extension.SPI;
 
 /**
  * 通用的序列化反序列化接口
  *
  * @author watson
  */
-public interface CommonSerializer {
-    static CommonSerializer getByCode(byte code) {
+@SPI
+public interface Serializer {
+    static Serializer getByCode(byte code) {
         if (code == SerializerEnum.KRYO.getCode()) {
             return new KryoSerializer();
         } else if (code == SerializerEnum.JSON.getCode()) {

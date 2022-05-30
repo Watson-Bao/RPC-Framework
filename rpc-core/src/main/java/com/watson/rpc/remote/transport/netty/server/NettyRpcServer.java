@@ -8,7 +8,7 @@ import com.watson.rpc.provider.ServiceProviderImpl;
 import com.watson.rpc.remote.transport.RpcServer;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageDecoder;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageEncoder;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 import com.watson.rpc.serializer.Hessian2Serializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -33,13 +33,13 @@ import java.util.concurrent.TimeUnit;
 public class NettyRpcServer implements RpcServer {
     private final int port;
     private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
-    private CommonSerializer serializer;
+    private Serializer serializer;
 
     public NettyRpcServer(int port) {
         this(port, new Hessian2Serializer());
     }
 
-    public NettyRpcServer(int port, CommonSerializer serializer) {
+    public NettyRpcServer(int port, Serializer serializer) {
         this.port = port;
         this.serializer = serializer;
     }
@@ -94,7 +94,7 @@ public class NettyRpcServer implements RpcServer {
     }
 
     @Override
-    public void setSerializer(CommonSerializer serializer) {
+    public void setSerializer(Serializer serializer) {
         this.serializer = serializer;
     }
 

@@ -2,7 +2,7 @@ package com.watson.rpc.remote.transport.socket.utils;
 
 import com.watson.rpc.enume.PackageType;
 import com.watson.rpc.remote.dto.RpcRequest;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,7 +13,7 @@ import java.io.OutputStream;
 public class ObjectWriter {
     private static final int MAGIC_NUMBER = 0xCAFEBABE;
 
-    public static void writeObject(OutputStream outputStream, Object object, CommonSerializer serializer) throws IOException {
+    public static void writeObject(OutputStream outputStream, Object object, Serializer serializer) throws IOException {
 
         outputStream.write(intToBytes(MAGIC_NUMBER));
         if (object instanceof RpcRequest) {

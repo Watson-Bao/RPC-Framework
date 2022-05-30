@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  * @author watson
  */
 @Slf4j
-public class JsonSerializer implements CommonSerializer {
+public class JsonSerializer implements Serializer {
 
     @Override
     public byte[] serialize(Object obj) {

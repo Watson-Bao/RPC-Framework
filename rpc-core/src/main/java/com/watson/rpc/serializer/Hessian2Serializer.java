@@ -17,7 +17,7 @@ import java.io.IOException;
  * @author watson
  */
 @Slf4j
-public class Hessian2Serializer implements CommonSerializer {
+public class Hessian2Serializer implements Serializer {
     @Override
     public byte[] serialize(Object obj) {
         Hessian2Output hessian2Output = null;

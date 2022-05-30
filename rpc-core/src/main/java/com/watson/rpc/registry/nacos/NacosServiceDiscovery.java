@@ -4,8 +4,8 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.naming.pojo.Instance;
 import com.watson.rpc.enume.RpcError;
 import com.watson.rpc.exception.RpcException;
-import com.watson.rpc.loadblance.LoadBalance;
-import com.watson.rpc.loadblance.RoundRobinLoadBalance;
+import com.watson.rpc.extension.ExtensionLoader;
+import com.watson.rpc.loadbalance.LoadBalance;
 import com.watson.rpc.registry.ServiceDiscovery;
 import com.watson.rpc.registry.nacos.utils.NacosUtil;
 import com.watson.rpc.remote.dto.RpcRequest;
@@ -22,7 +22,7 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
     private final LoadBalance loadBalance;
 
     public NacosServiceDiscovery() {
-        this.loadBalance = new RoundRobinLoadBalance();
+        this.loadBalance = ExtensionLoader.getExtensionLoader(LoadBalance.class).getExtension("loadBalance");
     }
 
     /**

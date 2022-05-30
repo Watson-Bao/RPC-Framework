@@ -8,7 +8,7 @@ import com.watson.rpc.factory.SingletonFactory;
 import com.watson.rpc.provider.ServiceProvider;
 import com.watson.rpc.provider.ServiceProviderImpl;
 import com.watson.rpc.remote.transport.RpcServer;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 import com.watson.rpc.serializer.Hessian2Serializer;
 import com.watson.rpc.utils.concurrent.threadpool.ThreadPoolFactoryUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -32,13 +32,13 @@ public class SocketRpcServer implements RpcServer {
     ;
     private final int port;
     private final ServiceProvider serviceProvider = SingletonFactory.getInstance(ServiceProviderImpl.class);
-    private CommonSerializer serializer;
+    private Serializer serializer;
 
     public SocketRpcServer(int port) {
         this(port, new Hessian2Serializer());
     }
 
-    public SocketRpcServer(int port, CommonSerializer serializer) {
+    public SocketRpcServer(int port, Serializer serializer) {
         this.port = port;
         this.serializer = serializer;
         threadPool = ThreadPoolFactoryUtils.createCustomThreadPoolIfAbsent("socket-server-rpc-pool");
@@ -72,7 +72,7 @@ public class SocketRpcServer implements RpcServer {
      * @param serializer
      */
     @Override
-    public void setSerializer(CommonSerializer serializer) {
+    public void setSerializer(Serializer serializer) {
         this.serializer = serializer;
     }
 

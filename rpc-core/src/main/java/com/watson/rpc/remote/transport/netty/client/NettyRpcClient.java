@@ -12,7 +12,7 @@ import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageDecoder;
 import com.watson.rpc.remote.transport.netty.codec.RpcMessageEncoder;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 import com.watson.rpc.serializer.Hessian2Serializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -38,13 +38,13 @@ public class NettyRpcClient implements RpcClient {
 
     private final UnprocessedRequests unprocessedRequests;
     private final ChannelProvider channelProvider;
-    private CommonSerializer serializer;
+    private Serializer serializer;
 
     public NettyRpcClient() {
         this(new Hessian2Serializer());
     }
 
-    public NettyRpcClient(CommonSerializer serializer) {
+    public NettyRpcClient(Serializer serializer) {
         this.eventLoopGroup = new NioEventLoopGroup();
         this.bootstrap = new Bootstrap();
         this.bootstrap.group(this.eventLoopGroup)
@@ -151,7 +151,7 @@ public class NettyRpcClient implements RpcClient {
     }
 
     @Override
-    public void setSerializer(CommonSerializer serializer) {
+    public void setSerializer(Serializer serializer) {
         this.serializer = serializer;
     }
 }

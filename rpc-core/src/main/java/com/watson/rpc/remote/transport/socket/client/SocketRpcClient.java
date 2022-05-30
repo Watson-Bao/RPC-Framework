@@ -8,7 +8,7 @@ import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.transport.RpcClient;
 import com.watson.rpc.remote.transport.socket.utils.ObjectReader;
 import com.watson.rpc.remote.transport.socket.utils.ObjectWriter;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 import com.watson.rpc.serializer.Hessian2Serializer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,13 +27,13 @@ import java.net.Socket;
 public class SocketRpcClient implements RpcClient {
 
     private final ServiceDiscovery serviceDiscovery;
-    private CommonSerializer serializer;
+    private Serializer serializer;
 
     public SocketRpcClient() {
         this(new Hessian2Serializer());
     }
 
-    public SocketRpcClient(CommonSerializer serializer) {
+    public SocketRpcClient(Serializer serializer) {
         this.serviceDiscovery = new NacosServiceDiscovery();
         this.serializer = serializer;
     }
@@ -63,7 +63,7 @@ public class SocketRpcClient implements RpcClient {
      * @param serializer
      */
     @Override
-    public void setSerializer(CommonSerializer serializer) {
+    public void setSerializer(Serializer serializer) {
         this.serializer = serializer;
     }
 }

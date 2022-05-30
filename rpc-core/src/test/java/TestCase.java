@@ -1,10 +1,15 @@
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONReader;
+import lombok.SneakyThrows;
+import org.junit.Test;
 
 import java.util.Date;
 
+
 public class TestCase {
-    public static void main(String[] args) {
+    @SneakyThrows
+    @Test
+    public void test() {
         Class<?>[] arrays = new Class[]{int.class, Date.class, String.class};
         Wrapper wrapper = new Wrapper();
         wrapper.setParameterTypes(arrays);
@@ -12,5 +17,6 @@ public class TestCase {
         System.out.println(s);
         Wrapper parse = JSON.parseObject(s, Wrapper.class, JSONReader.Feature.SupportClassForName);
         System.out.println(parse);
+
     }
 }

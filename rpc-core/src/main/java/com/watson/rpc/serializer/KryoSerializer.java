@@ -18,7 +18,7 @@ import java.io.ByteArrayOutputStream;
  * @author watson
  */
 @Slf4j
-public class KryoSerializer implements CommonSerializer {
+public class KryoSerializer implements Serializer {
     private static final ThreadLocal<Kryo> kryoThreadLocal = ThreadLocal.withInitial(() -> {
         Kryo kryo = new Kryo();
         kryo.register(RpcResponse.class);

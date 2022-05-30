@@ -1,13 +1,15 @@
 package com.watson.rpc.remote.transport;
 
+import com.watson.rpc.extension.SPI;
 import com.watson.rpc.remote.dto.RpcRequest;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 
 /**
  * 客户端类通用接口
  *
  * @author watson
  */
+@SPI
 public interface RpcClient {
     /**
      * 客户端发送请求并获取结果
@@ -22,5 +24,5 @@ public interface RpcClient {
      *
      * @param serializer
      */
-    void setSerializer(CommonSerializer serializer);
+    void setSerializer(Serializer serializer);
 }

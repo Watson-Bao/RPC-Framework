@@ -1,4 +1,4 @@
-package com.watson.rpc.loadblance;
+package com.watson.rpc.loadbalance;
 
 import com.alibaba.nacos.api.naming.pojo.Instance;
 

@@ -7,7 +7,7 @@ import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.handler.RpcRequestHandler;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -28,9 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 public class NettyRpcServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private final RpcRequestHandler rpcRequestHandler;
-    private final CommonSerializer serializer;
+    private final Serializer serializer;
 
-    public NettyRpcServerHandler(CommonSerializer serializer) {
+    public NettyRpcServerHandler(Serializer serializer) {
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
         this.serializer = serializer;
     }

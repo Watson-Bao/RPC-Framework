@@ -1,7 +1,7 @@
 package com.watson.rpc.remote.transport;
 
 import com.watson.rpc.config.RpcServiceConfig;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 
 /**
  * 服务器类通用接口
@@ -19,7 +19,7 @@ public interface RpcServer {
      *
      * @param serializer
      */
-    void setSerializer(CommonSerializer serializer);
+    void setSerializer(Serializer serializer);
 
     /**
      * 服务器端发布服务

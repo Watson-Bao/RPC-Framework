@@ -6,7 +6,7 @@ import com.watson.rpc.remote.constant.RpcConstants;
 import com.watson.rpc.remote.dto.RpcMessage;
 import com.watson.rpc.remote.dto.RpcRequest;
 import com.watson.rpc.remote.dto.RpcResponse;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
@@ -108,7 +108,7 @@ public class RpcMessageDecoder extends LengthFieldBasedFrameDecoder {
             if (bodyLength > 0) {
                 byte[] messageBody = new byte[bodyLength];
                 in.readBytes(messageBody);
-                CommonSerializer serializer = CommonSerializer.getByCode(rpcMessage.getCodec());
+                Serializer serializer = Serializer.getByCode(rpcMessage.getCodec());
                 if (messageType == RpcConstants.REQUEST_TYPE) {
                     RpcRequest tmpValue = serializer.deserialize(messageBody, RpcRequest.class);
                     rpcMessage.setData(tmpValue);

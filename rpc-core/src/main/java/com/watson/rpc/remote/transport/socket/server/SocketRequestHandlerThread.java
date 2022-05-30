@@ -6,7 +6,7 @@ import com.watson.rpc.remote.dto.RpcResponse;
 import com.watson.rpc.remote.handler.RpcRequestHandler;
 import com.watson.rpc.remote.transport.socket.utils.ObjectReader;
 import com.watson.rpc.remote.transport.socket.utils.ObjectWriter;
-import com.watson.rpc.serializer.CommonSerializer;
+import com.watson.rpc.serializer.Serializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -23,9 +23,9 @@ import java.net.Socket;
 public class SocketRequestHandlerThread implements Runnable {
     private final Socket socket;
     private final RpcRequestHandler rpcRequestHandler;
-    private final CommonSerializer serializer;
+    private final Serializer serializer;
 
-    public SocketRequestHandlerThread(Socket socket, CommonSerializer serializer) {
+    public SocketRequestHandlerThread(Socket socket, Serializer serializer) {
         this.socket = socket;
         this.rpcRequestHandler = SingletonFactory.getInstance(RpcRequestHandler.class);
         this.serializer = serializer;

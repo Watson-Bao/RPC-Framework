@@ -1,6 +1,7 @@
-package com.watson.rpc.loadblance;
+package com.watson.rpc.loadbalance;
 
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.watson.rpc.extension.SPI;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  *
  * @author watson
  */
+@SPI
 public interface LoadBalance {
     /**
      * 在已有服务实例（包含地址信息）列表中选择一个

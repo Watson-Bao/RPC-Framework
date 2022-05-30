@@ -1,6 +1,7 @@
 package com.watson.rpc.registry;
 
 import com.watson.rpc.config.RpcServiceConfig;
+import com.watson.rpc.extension.SPI;
 
 import java.net.InetSocketAddress;
 
@@ -9,6 +10,7 @@ import java.net.InetSocketAddress;
  *
  * @author watson
  */
+@SPI
 public interface ServiceRegistry {
     /**
      * 将一个服务注册进注册表
