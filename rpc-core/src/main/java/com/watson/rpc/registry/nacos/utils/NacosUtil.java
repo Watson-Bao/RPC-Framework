@@ -28,7 +28,11 @@ public class NacosUtil {
     private static InetSocketAddress address;
 
     static {
+        long sc = System.currentTimeMillis();
         namingService = getNacosNamingService();
+        long ec = System.currentTimeMillis();
+        log.info("连接到nacos耗时：{}", ec-sc);
+
     }
 
     private static NamingService getNacosNamingService() {
@@ -42,7 +46,10 @@ public class NacosUtil {
 
     public static void registerService(RpcServiceConfig rpcServiceConfig, InetSocketAddress address) throws NacosException {
 
+        long s1 = System.currentTimeMillis();
         namingService.registerInstance(rpcServiceConfig.getRpcServiceName(), rpcServiceConfig.getGroup(), address.getHostName(), address.getPort());
+        long e1 = System.currentTimeMillis();
+        log.info("服务注册耗时：{}", e1-s1);
         NacosUtil.address = address;
         RPC_SERVICE_CONFIGS.add(rpcServiceConfig);
     }

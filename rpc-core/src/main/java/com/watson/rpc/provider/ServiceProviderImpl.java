@@ -44,7 +44,7 @@ public class ServiceProviderImpl implements ServiceProvider {
         }
         registeredService.add(rpcServiceName);
         serviceMap.put(rpcServiceName, rpcServiceConfig.getService());
-        log.info("向接口: {} 注册服务: {}", rpcServiceConfig.getService().getClass().getInterfaces(), rpcServiceName);
+        log.info("向接口: {} 注册服务: {}", rpcServiceConfig.getInterfaceName(), rpcServiceName);
     }
 
     @Override
