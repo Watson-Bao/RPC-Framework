@@ -10,10 +10,10 @@
     <version>3.5.1-SNATHOST</version>
     <modules>
         <module>rpc-api</module>
-        <module>test-server</module>
+        <module>example-server</module>
         <module>rpc-common</module>
         <module>rpc-core</module>
-        <module>test-client</module>
+        <module>example-client</module>
     </modules>
     <name>RPC-Framework</name>
 

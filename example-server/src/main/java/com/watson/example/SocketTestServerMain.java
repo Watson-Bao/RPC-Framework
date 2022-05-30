@@ -1,4 +1,4 @@
-package com.watson.test;
+package com.watson.example;
 
 import com.watson.rpc.api.HelloService;
 import com.watson.rpc.config.RpcServiceConfig;
