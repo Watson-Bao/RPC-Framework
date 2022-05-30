@@ -31,7 +31,7 @@ public class NacosUtil {
         long sc = System.currentTimeMillis();
         namingService = getNacosNamingService();
         long ec = System.currentTimeMillis();
-        log.info("连接到Nacos耗时：{}", ec-sc);
+        log.info("连接到Nacos耗时：{}", ec - sc);
 
     }
 
@@ -49,7 +49,7 @@ public class NacosUtil {
         long s1 = System.currentTimeMillis();
         namingService.registerInstance(rpcServiceConfig.getRpcServiceName(), rpcServiceConfig.getGroup(), address.getHostName(), address.getPort());
         long e1 = System.currentTimeMillis();
-        log.info("服务注册耗时：{}", e1-s1);
+        log.info("服务注册耗时：{}", e1 - s1);
         NacosUtil.address = address;
         RPC_SERVICE_CONFIGS.add(rpcServiceConfig);
     }
