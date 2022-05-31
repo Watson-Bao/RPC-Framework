@@ -47,6 +47,7 @@ public class NettyRpcClientHandler extends SimpleChannelInboundHandler<Object> {
                     log.info("heart [{}]", tmp.getData());
                 } else if (messageType == RpcConstants.RESPONSE_TYPE) {
                     RpcResponse<Object> rpcResponse = (RpcResponse<Object>) tmp.getData();
+                    //将返回结果放入相应的future
                     unprocessedRequests.complete(rpcResponse);
                 }
             }
