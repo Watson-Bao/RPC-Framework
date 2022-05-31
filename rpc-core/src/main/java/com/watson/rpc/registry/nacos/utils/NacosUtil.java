@@ -47,7 +47,7 @@ public class NacosUtil {
     public static void registerService(RpcServiceConfig rpcServiceConfig, InetSocketAddress address) throws NacosException {
 
         long s1 = System.currentTimeMillis();
-        namingService.registerInstance(rpcServiceConfig.getRpcServiceName(), rpcServiceConfig.getGroup(), address.getHostName(), address.getPort());
+        namingService.registerInstance(rpcServiceConfig.getRpcServiceName(), rpcServiceConfig.getGroup(), address.getAddress().getHostAddress(), address.getPort());
         long e1 = System.currentTimeMillis();
         log.info("服务注册耗时：{}", e1 - s1);
         NacosUtil.address = address;
@@ -61,13 +61,13 @@ public class NacosUtil {
 
     public static void clearRegistry() {
         if (!RPC_SERVICE_CONFIGS.isEmpty() && address != null) {
-            String host = address.getHostName();
+            String host = address.getAddress().getHostAddress();
             int port = address.getPort();
-            for (RpcServiceConfig rpcService : RPC_SERVICE_CONFIGS) {
+            for (RpcServiceConfig rpcServiceConfig : RPC_SERVICE_CONFIGS) {
                 try {
-                    namingService.deregisterInstance(rpcService.getRpcServiceName(), rpcService.getGroup(), host, port);
+                    namingService.deregisterInstance(rpcServiceConfig.getRpcServiceName(), rpcServiceConfig.getGroup(), host, port);
                 } catch (NacosException e) {
-                    log.error("注销服务 {} 失败", rpcService.getRpcServiceName(), e);
+                    log.error("注销服务 {} 失败", rpcServiceConfig.getRpcServiceName(), e);
                 }
             }
         }

@@ -15,7 +15,7 @@ import com.watson.rpc.remote.transport.netty.client.NettyRpcClient;
  * @author watson
  */
 public class NettyTestClientMain {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         RpcClient client = new NettyRpcClient(SerializerEnum.KRYO.getCode());
         RpcServiceConfig rpcServiceConfig = RpcServiceConfig.builder().group("netty").version("version1").build();
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client, rpcServiceConfig);
@@ -26,10 +26,11 @@ public class NettyTestClientMain {
 //        System.out.println(res);
 
         long s = System.currentTimeMillis();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             String des = helloService.hello(new HelloObject(i, "This is a message~~~" + i), "Netty---");
             System.out.println(des);
         }
+
         long e = System.currentTimeMillis();
         System.out.println(e - s);
 

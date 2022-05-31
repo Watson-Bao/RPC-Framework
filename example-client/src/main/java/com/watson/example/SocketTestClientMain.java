@@ -24,7 +24,7 @@ public class SocketTestClientMain {
 //        System.out.println(res);
 
         long s = System.currentTimeMillis();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5000; i++) {
             String des = helloService.hello(new HelloObject(i, "This is a message~~~" + i), "Socket---");
             System.out.println(des);
         }
