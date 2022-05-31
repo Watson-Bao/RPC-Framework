@@ -32,7 +32,6 @@ public class NacosUtil {
         namingService = getNacosNamingService();
         long ec = System.currentTimeMillis();
         log.info("连接到Nacos耗时：{}", ec - sc);
-
     }
 
     private static NamingService getNacosNamingService() {
