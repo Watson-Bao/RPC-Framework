@@ -39,7 +39,7 @@ public class NettyRpcClientHandler extends SimpleChannelInboundHandler<Object> {
     @SuppressWarnings("unchecked")
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
         try {
-            log.info(String.format("客户端接收到消息: %s", msg));
+            log.info("客户端接收到消息: {}", msg);
             if (msg instanceof RpcMessage) {
                 RpcMessage tmp = (RpcMessage) msg;
                 byte messageType = tmp.getMessageType();
