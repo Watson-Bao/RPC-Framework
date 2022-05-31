@@ -56,11 +56,11 @@ public class NettyRpcClient implements RpcClient {
                     @Override
                     protected void initChannel(SocketChannel ch) {
                         ChannelPipeline p = ch.pipeline();
+                        // 客户端每隔10s检测读空闲的channel，检测到读空闲时，则发送一次心跳包
+                        p.addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
                         /*自定义序列化编解码器*/
                         // RpcResponse -> ByteBuf
                         p.addLast(new RpcMessageEncoder());
-                        // 客户端每隔10s检测读空闲的channel，检测到读空闲时，则发送一次心跳包
-                        p.addLast(new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
                         // ByteBuf -> RpcRequest
                         p.addLast(new RpcMessageDecoder());
                         p.addLast(new NettyRpcClientHandler());
