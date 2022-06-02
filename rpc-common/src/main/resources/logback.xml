@@ -7,7 +7,7 @@
     <!-- 定义日志输出格式-->
     <property name="log.charset" value="UTF-8"/>
     <property name="log.pattern"
-              value="%date{yyyy-MM-dd HH:mm:ss} [%boldYellow(%thread)] %highlight(%-5level) %boldGreen(%logger{56}.%method:%L) - %msg%n"/>
+              value="%date{yyyy-MM-dd HH:mm:ss} [%boldYellow(%28thread)] %highlight(%-5level) %boldGreen(%logger{56}.%method:%L) - %msg%n"/>
     <!--控制台输出 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <!-- 用来定义日志的格式 -->
