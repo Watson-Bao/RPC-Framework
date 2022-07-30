@@ -61,7 +61,7 @@ public class NettyRpcServer implements RpcServer {
                     .option(ChannelOption.SO_BACKLOG, 256)
                     // 是否开启 TCP 底层心跳机制
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
-                    // TCP默认开启了 Nagle 算法，该算法的作用是尽可能的发送大数据快，减少网络传输。TCP_NODELAY 参数的作用就是控制是否启用 Nagle 算法
+                    // TCP默认开启了 Nagle 算法，该算法的作用是尽可能的发送大数据快，减少网络传输。TCP_NODELAY 参数的作用就是控制是否关闭 Nagle 算法
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     // 当客户端第一次进行请求的时候才会进行初始化
                     .childHandler(new ChannelInitializer<SocketChannel>() {
@@ -76,8 +76,10 @@ public class NettyRpcServer implements RpcServer {
                         }
                     });
             String host = InetAddress.getLocalHost().getHostAddress();
-            // 绑定端口，同步等待绑定成功
+            // 绑定端口（启动服务器），同步等待绑定成功
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
+
+            //等待客户端连接
             future.channel().closeFuture().sync();
 
         } catch (InterruptedException e) {

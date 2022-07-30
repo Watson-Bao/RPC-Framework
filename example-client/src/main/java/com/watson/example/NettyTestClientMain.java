@@ -21,18 +21,17 @@ public class NettyTestClientMain {
         RpcClientProxy rpcClientProxy = new RpcClientProxy(client, rpcServiceConfig);
         HelloService helloService = rpcClientProxy.getProxy(HelloService.class);
 
-//        HelloObject object = new HelloObject(12, "This is a message");
-//        String res = helloService.hello(object, "Netty---");
-//        System.out.println(res);
+        String res = helloService.hello(new HelloObject(12, "This is a message"), "Netty---");
+        System.out.println(res);
 
-        long s = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
-            String des = helloService.hello(new HelloObject(i, "This is a message~~~" + i), "Netty---");
-            System.out.println(des);
-        }
-
-        long e = System.currentTimeMillis();
-        System.out.println(e - s);
+//        long s = System.currentTimeMillis();
+//        for (int i = 0; i < 100; i++) {
+//            String des = helloService.hello(new HelloObject(i, "This is a message~~~" + i), "Netty---");
+//            System.out.println(des);
+//        }
+//
+//        long e = System.currentTimeMillis();
+//        System.out.println(e - s);
 
 
     }

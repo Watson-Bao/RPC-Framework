@@ -24,6 +24,7 @@ import java.util.Set;
 public class NacosUtil {
     private static final NamingService namingService;
     private static final Set<RpcServiceConfig> RPC_SERVICE_CONFIGS = new HashSet<>();
+
     private static final String SERVER_ADDR = "wslhost:8848";
     private static InetSocketAddress address;
 
