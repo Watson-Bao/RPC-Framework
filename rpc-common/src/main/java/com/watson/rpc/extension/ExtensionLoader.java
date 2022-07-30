@@ -87,7 +87,7 @@ public class ExtensionLoader<T> {
         // 这段代码保证了扩展类只会被构造一次，也就是单例的.
         if (instance == null) {
             try {
-                //通过反射创建拓展对象
+                //通过反射创建拓展对象,根据name按需加载
                 EXTENSION_INSTANCES.putIfAbsent(clazz, clazz.getDeclaredConstructor().newInstance());
                 instance = (T) EXTENSION_INSTANCES.get(clazz);
             } catch (Exception e) {
